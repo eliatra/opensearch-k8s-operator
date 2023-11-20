@@ -1,33 +1,32 @@
-# OpenSearch-k8s-operator
+# Install OpenSearchCluster Using Helm
 
-The Kubernetes [OpenSearch Operator](https://github.com/Eliatra/opensearch-k8s-operator) is used for automating the deployment, provisioning, management, and orchestration of OpenSearch clusters and OpenSearch dashboards.
+After installing the operator (please refer to the [User Guide](./main.md) for details) you can deploy OpenSearch clusters using a separate helm chart.
 
-## Install OpenSearchCluster Using Helm
-The Operator can be easily installed using helm on any CNCF-certified Kubernetes cluster. Please refer to the [User Guide](https://github.com/Eliatra/opensearch-k8s-operator/blob/main/docs/userguide/main.md) for more information.
-Once the operator is installed, OpenSearch cluster can be installed using helm in the same CNCF-certified Kubernetes cluster. 
+## Install Chart
 
-### OpenSearchCluster Installation Using Helm
-
-#### Install Chart
-```
+```bash
 helm install [RELEASE_NAME] oci://registry-1.docker.io/eliatra/eoko-cluster
 ```
-#### Uninstall Chart
-```
+
+## Uninstall Chart
+
+```bash
 helm uninstall [RELEASE_NAME]
 ```
-#### Upgrade Chart
-```
-helm repo update
-helm upgrade [RELEASE_NAME] oci://registry-1.docker.io/eliatra/eoko-cluster
 
+## Upgrade Chart
+
+```bash
+helm upgrade [RELEASE_NAME] oci://registry-1.docker.io/eliatra/eoko-cluster
 ```
 
 ## Configuring OpenSearch Cluster
+
 By default, the installation will deploy a node pool consisting of three master nodes with the dashboard enabled. For the entire configuration, check [helm chart values](../../charts/opensearch-cluster/values.yaml).
 
-To further customize your OpenSearchCluster installation, you can utilize configuration overrides and modify your `values.yaml`, this allows you to tailor various aspects of the installation to meet your specific requirements. 
+To further customize your OpenSearchCluster installation, you can utilize configuration overrides and modify your `values.yaml`, this allows you to tailor various aspects of the installation to meet your specific requirements.
 For instance, if you need to change the httpPort to 9300, this can be achieved by setting `OpenSearchClusterSpec.general.httpPort` to `9300` in the [helm chart values](../../charts/opensearch-cluster/values.yaml).
+
 ```yaml
 OpenSearchClusterSpec:
   general:
@@ -35,5 +34,3 @@ OpenSearchClusterSpec:
     version: 2.3.0
     serviceName: "my-cluster"
 ```
-
-
