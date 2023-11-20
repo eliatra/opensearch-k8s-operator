@@ -119,32 +119,6 @@ rules:
 - apiGroups:
   - opensearch.eliatra.io
   resources:
-  - ismpolicies
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - opensearch.eliatra.io
-  resources:
-  - ismpolicies/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - opensearch.eliatra.io
-  resources:
-  - ismpolicies/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - opensearch.eliatra.io
-  resources:
   - opensearchactiongroups
   verbs:
   - create
@@ -242,6 +216,32 @@ rules:
   - opensearch.eliatra.io
   resources:
   - opensearchindextemplates/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - opensearch.eliatra.io
+  resources:
+  - opensearchismpolicies
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - opensearch.eliatra.io
+  resources:
+  - opensearchismpolicies/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - opensearch.eliatra.io
+  resources:
+  - opensearchismpolicies/status
   verbs:
   - get
   - patch
