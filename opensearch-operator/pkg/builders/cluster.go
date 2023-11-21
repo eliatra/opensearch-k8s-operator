@@ -1049,6 +1049,13 @@ func NewServiceMonitor(cr *eliatrav1.OpenSearchCluster) *monitoring.ServiceMonit
 	}
 	selector := metav1.LabelSelector{
 		MatchLabels: labels,
+		// Needed so only the pool-specific service is matched, otherwise there would be double scraping
+		MatchExpressions: []metav1.LabelSelectorRequirement{
+			{
+				Key:      helpers.NodePoolLabel,
+				Operator: metav1.LabelSelectorOpExists,
+			},
+		},
 	}
 
 	namespaceSelector := monitoring.NamespaceSelector{
