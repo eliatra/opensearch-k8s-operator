@@ -40,8 +40,7 @@ Features:
 
 The Operator can be easily installed using Helm:
 
-1. Add the helm repo: `helm repo add opensearch-operator https://eliatra.github.io/opensearch-k8s-operator/`
-2. Install the Operator: `helm install opensearch-operator opensearch-operator/opensearch-operator`
+1. Install the Operator: `helm install eoko oci://registry-1.docker.io/eliatra/eoko`
 
 ## Compatibility
 

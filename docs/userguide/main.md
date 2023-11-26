@@ -5,9 +5,7 @@ This guide is intended for users of the Opensearch Operator. If you want to cont
 ## Installation
 
 The Operator can be easily installed using Helm:
-
-1. Add the helm repo: `helm repo add opensearch-operator https://eliatra.github.io/opensearch-k8s-operator/`
-2. Install the Operator: `helm install eoko opensearch-operator/opensearch-operator`
+1. Install the Operator: ` eoko oci://registry-1.docker.io/eliatra/eoko`
 
 A few notes on operator releases:
 
@@ -78,7 +76,7 @@ The minimal cluster you deployed in this section is only intended for demo purpo
 
 ## Configuring the operator
 
-The majority of this guide deals with configuring and managing OpenSearch clusters. But there are some general options that can be configured for the operator itself. All of this is done using helm values your provide during installation: `helm install opensearch-operator opensearch-operator/opensearch-operator -f values.yaml`.
+The majority of this guide deals with configuring and managing OpenSearch clusters. But there are some general options that can be configured for the operator itself. All of this is done using helm values your provide during installation: `helm install oci://registry-1.docker.io/eliatra/eoko -f values.yaml`.
 
 For a list of all possible values see the [chart default values.yaml](../../charts/opensearch-operator/values.yaml). Some important ones:
 

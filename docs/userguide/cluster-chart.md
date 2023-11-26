@@ -10,7 +10,7 @@ Once the operator is installed, OpenSearch cluster can be installed using helm i
 
 #### Install Chart
 ```
-helm install [RELEASE_NAME] opensearch-operator/opensearch-cluster
+helm install [RELEASE_NAME] oci://registry-1.docker.io/eliatra/eoko-cluster
 ```
 #### Uninstall Chart
 ```
@@ -19,7 +19,7 @@ helm uninstall [RELEASE_NAME]
 #### Upgrade Chart
 ```
 helm repo update
-helm upgrade [RELEASE_NAME] opensearch-operator/opensearch-cluster
+helm upgrade [RELEASE_NAME] oci://registry-1.docker.io/eliatra/eoko-cluster
 
 ```
 

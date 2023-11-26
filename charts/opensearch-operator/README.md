@@ -8,14 +8,9 @@ The Operator can be easily installed using helm on any CNCF-certified Kubernetes
 
 ### Installation Using Helm
 
-#### Get Repo Info
-```
-helm repo add opensearch-operator https://eliatra.github.io/opensearch-k8s-operator/
-helm repo update
-```
 #### Install Chart
 ```
-helm install [RELEASE_NAME] opensearch-operator/opensearch-operator
+helm install [RELEASE_NAME] oci://registry-1.docker.io/eliatra/eoko
 ```
 #### Uninstall Chart
 ```
@@ -24,7 +19,7 @@ helm uninstall [RELEASE_NAME]
 #### Upgrade Chart
 ```
 helm repo update
-helm upgrade [RELEASE_NAME] opensearch-operator/opensearch-operator
+helm upgrade [RELEASE_NAME] oci://registry-1.docker.io/eliatra/eoko
 ```
 
 
