@@ -1,6 +1,6 @@
-# Opensearch Operator User Guide
+# Eliatra OpenSearch Kubernetes Operator (EOKO) User Guide
 
-This guide is intended for users of the Opensearch Operator. If you want to contribute to the development of the Operator, please see the [Design documents](../designs/high-level.md) and the [Developer guide](../developing.md) instead.
+This guide is intended for users of the EOKO. If you want to contribute to the development of the Operator, please see the [Design documents](../designs/high-level.md) and the [Developer guide](../developing.md) instead.
 
 ## Installation
 
@@ -11,7 +11,7 @@ A few notes on operator releases:
 
 * Please see the project README for a compatibility matrix which operator release is compatible with which OpenSearch release.
 * The userguide in the repository corresponds to the current development state of the code. To view the documentation for a specific released version switch to that tag in the Github menu.
-* We track feature requests as Github Issues. If you are missing a feature and find an issue for it, please be aware that an issue ticket closed as completed only means that feature has been implemented in the development version. After that it might still take some for the feature to be contained in a release. If you are unsure, please check the list of releases in our Github project if your feature is mentioned in the release notes.
+* We track feature requests as Github Issues. If you are missing a feature and find an issue for it, please be aware that an issue ticket closed as completed only means that feature has been implemented in the development version. After that it might still take some time for the feature to be contained in a release. If you are unsure, please check the list of releases in our Github project if your feature is mentioned in the release notes.
 
 ## Quickstart
 
@@ -100,7 +100,7 @@ The main job of the operator is to deploy and manage OpenSearch clusters. As suc
 
 ### Nodepools and Scaling
 
-OpenSearch clusters are composed of one or more node pools, with each representing a logical group of nodes that have the same [role](https://opensearch.org/docs/latest/opensearch/cluster/). Each node pool can have its own resources. For each configured nodepool the operator will create a Kubernetes StatefulSet. It also creates a Kubernetes service object for each nodepool so you can communicate with a specfic nodepool if you want.
+OpenSearch clusters are composed of one or more node pools, with each representing a logical group of nodes that have the same [role](https://opensearch.org/docs/latest/opensearch/cluster/). Each node pool can have its own resources. For each configured nodepool the operator will create a Kubernetes StatefulSet. It also creates a Kubernetes service object for each nodepool so you can communicate with a specific nodepool if you want.
 
 ```yaml
 spec:
@@ -238,7 +238,7 @@ Directly exposing the node HTTP port outside the Kubernetes cluster is not recom
 
 You can extend the functionality of OpenSearch via [plugins](https://opensearch.org/docs/latest/install-and-configure/install-opensearch/plugins/#available-plugins). Commonly used ones are snapshot repository plugins for external backups (e.g. to AWS S3 or Azure Blog Storage). The operator has support to automatically install such plugins during setup.
 
-To install a plugin for opensearch add it to the list under `general.pluginsList`:
+To install a plugin for OpenSearch add it to the list under `general.pluginsList`:
 
 ```yaml
   general:
@@ -249,7 +249,7 @@ To install a plugin for opensearch add it to the list under `general.pluginsList
     pluginsList: ["repository-s3","https://github.com/aiven/prometheus-exporter-plugin-for-opensearch/releases/download/1.3.0.0/prometheus-exporter-1.3.0.0.zip"]
 ```
 
-To install a plugin for opensearch dashboards add it to the list under `dashboards.pluginsList`:
+To install a plugin for OpenSearch dashboards add it to the list under `dashboards.pluginsList`:
 
 ```yaml
   dashboards:
@@ -263,12 +263,12 @@ Please note:
 
 * [Bundled plugins](https://opensearch.org/docs/latest/install-and-configure/install-opensearch/plugins/#bundled-plugins) do not have to be added to the list, they are installed automatically
 * You can provide either a plugin name or a complete to the plugin zip. The items you provide are passed to the `bin/opensearch-plugin install <plugin-name>` command.
-* Updating the list for an already installed cluster will lead to a rolling restart of all opensearch nodes to install the new plugin.
-* If your plugin requires additional configuration you must provide that either through `additionalConfig` (see section [Configuring opensearch.yml](#configuring-opensearchyml)) or as secrets in the opensearch keystore (see section [Add secrets to keystore](#add-secrets-to-keystore)).
+* Updating the list for an already installed cluster will lead to a rolling restart of all OpenSearch nodes to install the new plugin.
+* If your plugin requires additional configuration you must provide that either through `additionalConfig` (see section [Configuring opensearch.yml](#configuring-opensearchyml)) or as secrets in the OpenSearch keystore (see section [Add secrets to keystore](#add-secrets-to-keystore)).
 
 ### Add secrets to keystore
 
-Some OpenSearch features (e.g. snapshot repository plugins) require sensitive configuration. This is handled via the opensearch keystore. The operator allows you to populate this keystore using Kubernetes secrets.
+Some OpenSearch features (e.g. snapshot repository plugins) require sensitive configuration. This is handled via the OpenSearch keystore. The operator allows you to populate this keystore using Kubernetes secrets.
 To do so add the secrets under the `general.keystore` section:
 
 ```yaml
@@ -354,7 +354,7 @@ spec:
     setVMMaxMapCount: true
 ```
 
-This will configure an init container for each opensearch pod that executes the needed `sysctl` command. By default the init container uses a busybox image. If you want to change that (for example to use an image from a private registry), see [Custom init helper](#custom-init-helper).
+This will configure an init container for each OpenSearch pod that executes the needed `sysctl` command. By default the init container uses a busybox image. If you want to change that (for example to use an image from a private registry), see [Custom init helper](#custom-init-helper).
 
 ### Configuring Snapshot Repo (BETA)
 
@@ -438,7 +438,7 @@ The operator can automatically deploy and manage a OpenSearch Dashboards instanc
 spec:
   dashboards:
     enable: true  # Set this to true to enable the Dashboards deployment
-    version: 2.3.0  # The Dashboards version to deploy. This should match the configured opensearch version
+    version: 2.3.0  # The Dashboards version to deploy. This should match the configured OpenSearch version
     replicas: 1  # The number of replicas to deploy
 ```
 
@@ -504,7 +504,7 @@ This also sets the `server.rewriteBasePath` option to `true`. So if you expose D
 
 ### Dashboards HTTP
 
-OpenSearch Dashboards can expose its API/UI via HTTP or HTTPS. It is unencrypted by default. Similar to how the operator handles TLS for the opensearch nodes, to secure the connection you can either let the Operator generate and sign a certificate, or provide your own. The following fields in the `OpenSearchCluster` custom resource are available to configure it:
+OpenSearch Dashboards can expose its API/UI via HTTP or HTTPS. It is unencrypted by default. Similar to how the operator handles TLS for the OpenSearch nodes, to secure the connection you can either let the Operator generate and sign a certificate, or provide your own. The following fields in the `OpenSearchCluster` custom resource are available to configure it:
 
 ```yaml
 # ...
@@ -528,7 +528,7 @@ If you want to expose Dashboards outside of the cluster, it is recommended to us
 
 ## Customizing the kubernetes deployment
 
-Besides configuring OpenSearch itself, the operator also allows you to customize how the operator deploys the opensearch and dashboards pods.
+Besides configuring OpenSearch itself, the operator also allows you to customize how the operator deploys the OpenSearch and dashboards pods.
 
 ### Data Persistence
 
@@ -592,9 +592,9 @@ nodePools:
 
 ### Security Context for pods and containers
 
-You can set the security context for the Opensearch pods and the Dashboard pod. This is useful when you want to define privilege and access control settings for a Pod or Container. To specify security settings for Pods, include the `podSecurityContext` field and for containers, include the `securityContext` field.
+You can set the security context for the OpenSearch pods and the Dashboard pod. This is useful when you want to define privilege and access control settings for a Pod or Container. To specify security settings for Pods, include the `podSecurityContext` field and for containers, include the `securityContext` field.
 
-The structure is the same for both Opensearch pods (in `spec.general`) and the Dashboard pod (in `spec.dashboards`):
+The structure is the same for both OpenSearch pods (in `spec.general`) and the Dashboard pod (in `spec.dashboards`):
 
 ```yaml
 spec:
@@ -617,9 +617,9 @@ spec:
       privileged: false
 ```
 
-The Opensearch pods by default launch an init container to configure the volume. This container needs to run with root permissions and does not use any defined securityContext. If your kubernetes environment does not allow containers with the root user you need to [disable this init helper](#disabling-the-init-helper). In this situation also make sure to set `general.setVMMaxMapCount` to `false` as this feature also launches an init container with root.
+The OpenSearch pods by default launch an init container to configure the volume. This container needs to run with root permissions and does not use any defined securityContext. If your kubernetes environment does not allow containers with the root user you need to [disable this init helper](#disabling-the-init-helper). In this situation also make sure to set `general.setVMMaxMapCount` to `false` as this feature also launches an init container with root.
 
-Note that the bootstrap pod started during initial cluster setup uses the same (pod)securityContext as the Opensearch pods (with the same limitations for the init containers).
+Note that the bootstrap pod started during initial cluster setup uses the same (pod)securityContext as the OpenSearch pods (with the same limitations for the init containers).
 
 ### Labels or Annotations on OpenSearch nodes
 
@@ -694,7 +694,7 @@ spec:
 
 ### Additional Volumes
 
-Sometimes it is neccessary to mount ConfigMaps, Secrets or emptyDir into the Opensearch pods as volumes to provide additional configuration (e.g. plugin config files).  This can be achieved by providing an array of additional volumes to mount to the custom resource. This option is located in either `spec.general.additionalVolumes` or `spec.dashboards.additionalVolumes`.  The format is as follows:
+Sometimes it is necessary to mount ConfigMaps, Secrets or emptyDir into the OpenSearch pods as volumes to provide additional configuration (e.g. plugin config files).  This can be achieved by providing an array of additional volumes to mount to the custom resource. This option is located in either `spec.general.additionalVolumes` or `spec.dashboards.additionalVolumes`.  The format is as follows:
 
 ```yaml
 spec:
@@ -717,13 +717,13 @@ spec:
         secretName: secret-name
 ```
 
-The defined volumes are added to all pods of the opensearch cluster. It is currently not possible to define them per nodepool.
+The defined volumes are added to all pods of the OpenSearch cluster. It is currently not possible to define them per nodepool.
 
 ### Adding environment variables to pods
 
-The operator allows you to add your own environment variables to the opensearch pods and the Dashboards pods. You can provide the value as a string literal or mount it from a secret or configmap.
+The operator allows you to add your own environment variables to the OpenSearch pods and the Dashboards pods. You can provide the value as a string literal or mount it from a secret or configmap.
 
-The structure is the same for both opensearch and dashboards:
+The structure is the same for both OpenSearch and dashboards:
 
 ```yaml
 spec:
@@ -889,7 +889,7 @@ spec:
 ### Exposing the OpenSearch cluster REST API
 
 If you want to expose the REST API of OpenSearch outside your Kubernetes cluster, the recommended way is to do this via ingress.
-Internally you should use self-signed certificates (you can let the operator generate them), and then let the ingress use a certificate from an accepted CA (for example LetsEncrypt or a company-internal CA). That way you do not have the hassle of supplying custom certificates to the opensearch cluster but your users still see valid certificates.
+Internally you should use self-signed certificates (you can let the operator generate them), and then let the ingress use a certificate from an accepted CA (for example LetsEncrypt or a company-internal CA). That way you do not have the hassle of supplying custom certificates to the OpenSearch cluster but your users still see valid certificates.
 
 ## Cluster operations
 
@@ -924,7 +924,7 @@ Downgrades and upgrades that span more than one major version are not supported,
 
 ### Configuration changes
 
-As explained in the section [Configuring opensearch.yml](#configuring-opensearchyml) you can add extra opensearch configuration to your cluster. Changing this configuration on an already installed cluster will be detected by the operator and it will do a rolling restart of all cluster nodes to apply that new configuration. The same goes for nodepool-specific configuration like `resources`, `annotation` or `labels`.
+As explained in the section [Configuring opensearch.yml](#configuring-opensearchyml) you can add extra OpenSearch configuration to your cluster. Changing this configuration on an already installed cluster will be detected by the operator and it will do a rolling restart of all cluster nodes to apply that new configuration. The same goes for nodepool-specific configuration like `resources`, `annotation` or `labels`.
 
 ### Volume Expansion
 
@@ -998,9 +998,9 @@ To apply the securityconfig to the OpenSearch cluster, the Operator uses a separ
 
 The operator provides custom kubernetes resources that allow you to create/update/manage security configuration resources such as users, roles, action groups etc. as kubernetes objects.
 
-#### Opensearch Users
+#### OpenSearch Users
 
-It is possible to manage Opensearch users in Kubernetes with the operator. The operator will not modify users that already exist. You can create an example user as follows:
+It is possible to manage OpenSearch users in Kubernetes with the operator. The operator will not modify users that already exist. You can create an example user as follows:
 
 ```yaml
 apiVersion: opensearch.eliatra.io/v1
@@ -1022,9 +1022,9 @@ The namespace of the `OpenSearchUser` must be the namespace the OpenSearch clust
 
 Note that a secret called `sample-user-password` will need to exist in the `default` namespace with the base64 encoded password in the `password` key.
 
-#### Opensearch Roles
+#### OpenSearch Roles
 
-It is possible to manage Opensearch roles in Kubernetes with the operator. The operator will not modify roles that already exist. You can create an example role as follows:
+It is possible to manage OpenSearch roles in Kubernetes with the operator. The operator will not modify roles that already exist. You can create an example role as follows:
 
 ```yaml
 apiVersion: opensearch.eliatra.io/v1
@@ -1046,7 +1046,7 @@ spec:
     - read
 ```
 
-#### Linking Opensearch Users and Roles
+#### Linking OpenSearch Users and Roles
 
 The operator allows you link any number of users, backend roles and roles with a OpensearchUserRoleBinding. Each user in the binding will be granted each role. E.g:
 
@@ -1067,9 +1067,9 @@ spec:
   - sample-role
 ```
 
-#### Opensearch Action Groups
+#### OpenSearch Action Groups
 
-It is possible to manage Opensearch action groups in Kubernetes with the operator. The operator will not modify action groups that already exist. You can create an example action group as follows:
+It is possible to manage OpenSearch action groups in Kubernetes with the operator. The operator will not modify action groups that already exist. You can create an example action group as follows:
 
 ```yaml
 apiVersion: opensearch.eliatra.io/v1
@@ -1087,9 +1087,9 @@ spec:
   description: Sample action group
 ```
 
-#### Opensearch Tenants
+#### OpenSearch Tenants
 
-It is possible to manage Opensearch tenants in Kubernetes with the operator. The operator will not modify tenants that already exist. You can create an example tenant as follows:
+It is possible to manage OpenSearch tenants in Kubernetes with the operator. The operator will not modify tenants that already exist. You can create an example tenant as follows:
 
 ```yaml
 apiVersion: opensearch.eliatra.io/v1
@@ -1159,7 +1159,7 @@ Changing the admin password after the cluster has been created is possible via t
 
 ### Custom Dashboards user
 
-Dashboards requires an opensearch user to connect to the cluster. By default Dashboards is configured to use the demo admin user. If you supply your own securityconfig and want to change the credentials Dashboards should use, you must create a secret with keys `username` and `password` that contains the new credentials and then supply that secret to the operator via the cluster spec:
+Dashboards requires an OpenSearch user to connect to the cluster. By default Dashboards is configured to use the demo admin user. If you supply your own securityconfig and want to change the credentials Dashboards should use, you must create a secret with keys `username` and `password` that contains the new credentials and then supply that secret to the operator via the cluster spec:
 
 ```yaml
 spec:
@@ -1168,12 +1168,12 @@ spec:
       name: dashboards-credentials  # This is the name of your secret that contains the credentials for Dashboards to use
 ```
 
-## Adding Opensearch Monitoring to your cluster
+## Adding OpenSearch Monitoring to your cluster
 
-The operator allows you to install and enable the [Aiven monitoring plugin for OpenSearch](https://github.com/aiven/prometheus-exporter-plugin-for-opensearch) on your cluster as a built-in feature. If enabled the operator will install the aiven plugin into the opensearch pods and generate a Prometheus ServiceMonitor object to configure the plugin for scraping.
+The operator allows you to install and enable the [Aiven monitoring plugin for OpenSearch](https://github.com/aiven/prometheus-exporter-plugin-for-opensearch) on your cluster as a built-in feature. If enabled the operator will install the aiven plugin into the OpenSearch pods and generate a Prometheus ServiceMonitor object to configure the plugin for scraping.
 This feature needs internet connectivity to download the plugin. if you are working in a restricted environment, please download the plugin zip for your cluster version (example for 2.3.0: `https://github.com/aiven/prometheus-exporter-plugin-for-opensearch/releases/download/2.3.0.0/prometheus-exporter-2.3.0.0.zip`) and provide it at a location the operator can reach. Configure that URL as `pluginURL` in the monitoring config. By default the convention shown below in the example will be used if no `pluginUrl` is specified.
 
-By default the Opensearch admin user will be used to access the monitoring API. If you want to use a separate user with limited permissions you need to create that user using either of the following options:
+By default the OpenSearch admin user will be used to access the monitoring API. If you want to use a separate user with limited permissions you need to create that user using either of the following options:
 
 a. Create new applicative User using OpenSearch API/UI, create new secret with 'username' and 'password' keys and provide that secret name under `monitoringUserSecret`.
 b. Use Our OpenSearchUser CRD and provide the secret under monitoringUserSecret.

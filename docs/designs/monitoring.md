@@ -6,8 +6,8 @@
   - [Architecture](#architecture)
   - [Metrics](#metrics)
     - [Default go metrics](#default-go-metrics)
-    - [Opensearch Node Metrics](#opensearch-node-metrics)
-    - [Opensearch Controller Metrics](#opensearch-controller-metrics) 
+    - [OpenSearch Node Metrics](#opensearch-node-metrics)
+    - [OpenSearch Controller Metrics](#opensearch-controller-metrics) 
   - [Task list](#task-list)
 
 ## Goals
@@ -148,7 +148,7 @@ The [opensearch-prometheus-exporter](https://github.com/aparo/opensearch-prometh
 
 - [ ] Default metrics publication
 - [ ] Prometheus-plugin integration
-- [ ] Opensearch controller metrics publication
+- [ ] OpenSearch controller metrics publication
 - [ ] Deployment of the service-monitor for every clusters
 - [ ] Deployment of the Prometheus-operator 
 - [ ] Prometheus-operator integration

@@ -1,6 +1,6 @@
 # Cluster configuration
 
-The operator makes use of two methods for configuring a cluster.  For user defined additional configuration key value pairs, these are added to the pods as environment variable.  On startup the Opensearch containers will load the environment variables as Opensearch configuration.  Security plugin configurations that are applied by the operator are added to the `opensearch.yml` config file which is then mounted into the container.
+The operator makes use of two methods for configuring a cluster.  For user defined additional configuration key value pairs, these are added to the pods as environment variable.  On startup the OpenSearch containers will load the environment variables as OpenSearch configuration.  Security plugin configurations that are applied by the operator are added to the `opensearch.yml` config file which is then mounted into the container.
 
 ## Rolling restarts
 

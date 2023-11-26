@@ -7,7 +7,7 @@ A [Custom Resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-ex
 Cluster admins can update custom resources independently of the cluster itself. Once a custom resource is installed, users can create and access its objects using kubectl, just as they do for built-in resources like Pods.
 
 The CustomResourceDefinition API resource allows you to define custom resources. Defining a CRD object creates a new custom resource with a name and schema that you specify. The Kubernetes API serves and handles the storage of your custom resource. Every resource is build from `KGV` that stands for Group Version Resource and this is what drives the Kubernetes API Server structure. 
-The `OpensearchCLuster` CRD is representing an Opensearch cluster.
+The `OpensearchCLuster` CRD is representing an OpenSearch cluster.
 
 
 Our CRD is Defined by kind: `OpenSearchCluster`,group: `opensearch.eliatra.io` and version `v1`.
@@ -45,7 +45,7 @@ Our CRD is Defined by kind: `OpenSearchCluster`,group: `opensearch.eliatra.io` a
       </tr><tr>
         <td><b>status</b></td>
         <td>object</td>
-        <td>OpensearchClusterStatus defines the observed state of ClusterStatus. include ComponentsStatus that saves and share necessary state of the operator components.  </td>
+        <td>OpenSearchClusterStatus defines the observed state of ClusterStatus. include ComponentsStatus that saves and share necessary state of the operator components.  </td>
         <td>true</td>
       </tr></tbody>
 </table>
@@ -55,7 +55,7 @@ Our CRD is Defined by kind: `OpenSearchCluster`,group: `opensearch.eliatra.io` a
 
 
 
-ClusterSpec defines the desired state of OpensearchCluster
+ClusterSpec defines the desired state of OpenSearchCluster
 
 <table>
     <thead>
@@ -69,7 +69,7 @@ ClusterSpec defines the desired state of OpensearchCluster
     <tbody><tr>
         <td><b>general</b></td>
         <td>object</td>
-        <td>Opensearch general configuration</td>
+        <td>OpenSearch general configuration</td>
         <td>true</td>
       </tr><tr>
         <td><b>Bootstrap</b></td>
@@ -79,12 +79,12 @@ ClusterSpec defines the desired state of OpensearchCluster
       </tr><tr>
         <td><b>Dashboards</b></td>
         <td>object</td>
-        <td>Opensearch-dashboards configuration</td>
+        <td>OpenSearch-dashboards configuration</td>
         <td>false</td>
       </tr><tr>
         <td><b>confMgmt</b></td>
         <td>object</td>
-        <td>Config object to enable additional OpensearchOperator features/components</td>
+        <td>Config object to enable additional OpenSearchOperator features/components</td>
         <td>false</td>
       </tr><tr>
         <td><b>security</b></td>
@@ -94,12 +94,12 @@ ClusterSpec defines the desired state of OpensearchCluster
       </tr><tr>
         <td><b>nodePools</b></td>
         <td>[]object</td>
-        <td>List of objects that define the different nodePools in an OpensearchCluster. Each nodePool represents a group of nodes with the same opensearch roles and resources. Each nodePool is deployed as a Kubernetes StatefulSet. Together they form the opensearch cluster.</td>
+        <td>List of objects that define the different nodePools in an OpenSearchCluster. Each nodePool represents a group of nodes with the same opensearch roles and resources. Each nodePool is deployed as a Kubernetes StatefulSet. Together they form the opensearch cluster.</td>
         <td>true</td>
       </tr><tr>
         <td><b>monitoring</b></td>
         <td>object</td>
-        <td>monitoring configuration in an OpensearchCluster</td>
+        <td>monitoring configuration in an OpenSearchCluster</td>
         <td>false</td>
       </tr><tr>
         <td><b>initHelper</b></td>
@@ -115,7 +115,7 @@ ClusterSpec defines the desired state of OpensearchCluster
   GeneralConfig
 </h3>
 
-GeneralConfig defines global Opensearch cluster configuration 
+GeneralConfig defines global OpenSearch cluster configuration 
 
 <table>
     <thead>
@@ -240,7 +240,7 @@ GeneralConfig defines global Opensearch cluster configuration
   Bootstrap
 </h3>
 
-Bootstrap defines Opensearch bootstrap pod configuration
+Bootstrap defines OpenSearch bootstrap pod configuration
 
 <table>
     <thead>
@@ -255,7 +255,7 @@ Bootstrap defines Opensearch bootstrap pod configuration
     <tbody><tr>
         <td><b>resources</b></td>
         <td>corev1.ResourceRequirements</td>
-        <td>Define Opensearch bootstrap pod resources</td>
+        <td>Define OpenSearch bootstrap pod resources</td>
         <td>false</td>
         <td>-</td>
       </tr><tr>
@@ -295,7 +295,7 @@ Bootstrap defines Opensearch bootstrap pod configuration
   Dashboards
 </h3>
 
-Dashboards defines Opensearch-Dashboard configuration and deployment
+Dashboards defines OpenSearch-Dashboard configuration and deployment
 
 <table>
     <thead>
@@ -310,13 +310,13 @@ Dashboards defines Opensearch-Dashboard configuration and deployment
     <tbody><tr>
         <td><b>enable</b></td>
         <td>bool</td>
-        <td>if true, will deploy Opensearch-dashboards with the cluster</td>
+        <td>if true, will deploy OpenSearch-dashboards with the cluster</td>
         <td>false</td>
         <td>false</td>
       </tr><tr>
         <td><b>replicas</b></td>
         <td>int</td>
-        <td>defines Opensearch-Dashboards deployment's replicas</td>
+        <td>defines OpenSearch-Dashboards deployment's replicas</td>
         <td>true</td>
         <td>1</td>
       </tr><tr>
@@ -328,13 +328,13 @@ Dashboards defines Opensearch-Dashboard configuration and deployment
       </tr><tr>
         <td><b>resources</b></td>
         <td>corev1.ResourceRequirements</td>
-        <td> Define Opensearch-Dashboard resources </td>
+        <td> Define OpenSearch-Dashboard resources </td>
         <td>false</td>
-        <td>Default Opensearch-dashboard resources</td>
+        <td>Default OpenSearch-dashboard resources</td>
       </tr><tr>
         <td><b>version</b></td>
         <td>string</td>
-        <td>Opensearch-dashboards version</td>
+        <td>OpenSearch-dashboards version</td>
         <td>false</td>
         <td>latest</td>
       </tr><tr>
@@ -354,21 +354,21 @@ Dashboards defines Opensearch-Dashboard configuration and deployment
       </tr><tr>
         <td><b>image</b></td>
         <td>string</td>
-        <td>Define Opensearch-dashboards image</td>
+        <td>Define OpenSearch-dashboards image</td>
         <td>false</td>
         <td> - </td>
       </tr><tr>
       </tr><tr>
         <td><b>imagePullPolicy</b></td>
         <td>corev1.PullPolicy</td>
-        <td>Define Opensearch-dashboards image pull policy</td>
+        <td>Define OpenSearch-dashboards image pull policy</td>
         <td>false</td>
         <td> - </td>
       </tr><tr>
       </tr><tr>
         <td><b>imagePullSecrets</b></td>
         <td>corev1.LocalObjectReference</td>
-        <td>Define Opensearch-dashboards image pull secrets</td>
+        <td>Define OpenSearch-dashboards image pull secrets</td>
         <td>false</td>
         <td> - </td>
       </tr><tr>
@@ -436,7 +436,7 @@ Dashboards defines Opensearch-Dashboard configuration and deployment
   NodePools
 </h3>
 
-Every NodePool is defining different Opensearch Nodes StatefulSet 
+Every NodePool is defining different OpenSearch Nodes StatefulSet 
 
 <table>
     <thead>
@@ -542,7 +542,7 @@ Every NodePool is defining different Opensearch Nodes StatefulSet
   InitHelperConfig
 </h3>
 
-InitHelperConfig defines global Opensearch InitHelper image configuration
+InitHelperConfig defines global OpenSearch InitHelper image configuration
 
 <table>
     <thead>
@@ -586,7 +586,7 @@ InitHelperConfig defines global Opensearch InitHelper image configuration
   Monitoring
 </h3>
 
-Monitoring defines Opensearch monitoring configuration
+Monitoring defines OpenSearch monitoring configuration
 
 <table>
     <thead>

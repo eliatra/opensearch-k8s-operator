@@ -10,30 +10,25 @@ For more information and commercial support go to [https://eliatra.com/](https:/
 
 The Operator can be easily installed using helm on any CNCF-certified Kubernetes cluster. Please refer to the [User Guide](./docs/userguide/main.md) for installation instructions.
 
-## Roadmap
-
-- Auto-Scaler.
-- OpenShift support.
-- Data-prepper support.
 
 ## Current feature list
 
 Features:
 
-- [x] Deploy a new OS cluster.
-- [x] Ability to deploy multiple clusters.
-- [x] Spin up OS dashboards.
-- [x] Configuration of all node roles (master, data, coordinating..).
-- [x] Scale the cluster resources (manually), per nodes' role group.
-- [x] Drain strategy for scale down.
-- [x] Version updates.
-- [x] Change nodes' memory allocation and limits.
-- [x] Secured installation features.
-- [x] Certificate management.
-- [x] Rolling restarts - through API.
-- [x] Scaling nodes' disks - increase disk size.
-- [x] Cluster configurations and nodes' settings updates.
-- [x] Operator Monitoring, with Prometheus and Grafana.
+- Deploy a new OS cluster.
+- Ability to deploy multiple clusters.
+- Spin up OS dashboards.
+- Configuration of all node roles (master, data, coordinating..).
+- Scale the cluster resources (manually), per nodes' role group.
+- Drain strategy for scale down.
+- Version updates.
+- Change nodes' memory allocation and limits.
+- Secured installation features.
+- Certificate management.
+- Rolling restarts - through API.
+- Scaling nodes' disks - increase disk size.
+- Cluster configurations and nodes' settings updates.
+- Operator Monitoring, with Prometheus and Grafana.
 
 
 ## Installation
@@ -44,9 +39,9 @@ The Operator can be easily installed using Helm:
 
 ## Compatibility
 
-The opensearch k8s operator aims to be compatible to all supported opensearch versions. Please check the table below for details:
+The Eliatra OpenSearch Kubernetes Operator (EOKO) aims to be compatible to all supported OpenSearch versions. Please check the table below for details:
 
-| Operator Version | Min Supported Opensearch Version | Max supported Opensearch version | Comment |
+| Operator Version | Min Supported OpenSearch Version | Max supported OpenSearch version | Comment |
 |------------------|----------------------------------|----------------------------------|---------|
 | 2.5              | 1.0                              | 2.8                              |         |
 

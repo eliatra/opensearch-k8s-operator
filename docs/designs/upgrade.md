@@ -38,7 +38,7 @@ flowchart TD
 
 ## Principals for Rolling upgrade
 
-The upgrade principals follow the recommendations for completing a rolling upgrade of an Opensearch cluster.  Namely:
+The upgrade principals follow the recommendations for completing a rolling upgrade of an OpenSearch cluster.  Namely:
  - Cluster nodes should be upgraded one at a time
  - The cluster should be healthy before upgrading each node
  - Master eligible nodes should be upgraded last

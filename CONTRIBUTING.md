@@ -36,7 +36,7 @@ If you have the time and infrastructure, please test the operator in different e
 - Your cluster spec YAML (if possible reduced to a minimal testcase) to allow others to reproduce your problem
 - Any relevant kubectl outputs
 - Operator logs if they have relevant information
-- Opensearch and dashboards logs if they relevant information
+- OpenSearch and dashboards logs if they relevant information
 
 ### Contributing Code
 
