@@ -40,16 +40,6 @@ jobs:
           sed -i -e 's/^version:.*/version: '$RELEASE_VERSION'/' charts/opensearch-operator/Chart.yaml
           sed -i -e 's/^appVersion:.*/appVersion: '$RELEASE_VERSION'/' charts/opensearch-cluster/Chart.yaml
           sed -i -e 's/^version:.*/version: '$RELEASE_VERSION'/' charts/opensearch-cluster/Chart.yaml
-          # Commit changes
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          git add charts
-          if git commit -m "Prepare for release $RELEASE_VERSION"; then
-            git push origin main
-          fi
-          # Create tag, this will not trigger the other release pipeline
-          git tag v$RELEASE_VERSION
-          git push --tags
         env:
           RELEASE_VERSION: ${{ inputs.version }}
 
@@ -75,7 +65,7 @@ jobs:
           name: eoko-cluster
           path: charts/opensearch-cluster
           repository: ${{ secrets.DOCKERHUB_USERNAME }}
-          tag: ${{ github.ref }}
+          tag: ${{ inputs.version }}
           registry: docker.io
           registry_username: ${{ secrets.DOCKERHUB_USERNAME }}
           registry_password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -87,11 +77,27 @@ jobs:
           name: eoko
           path: charts/opensearch-operator
           repository: ${{ secrets.DOCKERHUB_USERNAME }}
-          tag: ${{ github.ref }}
+          tag: ${{ inputs.version }}
           registry: docker.io
           registry_username: ${{ secrets.DOCKERHUB_USERNAME }}
           registry_password: ${{ secrets.DOCKERHUB_TOKEN }}
           update_dependencies: 'true' # Defaults to false          
+
+      - name: Commit changes
+        run: |
+          # Commit changes
+          git config user.name "Eliatra"
+          git config user.email "git@eliatra.com"
+          git add charts
+          if git commit -m "Prepare for release $RELEASE_VERSION"; then
+            git push origin main
+          fi
+          # Create tag, this will not trigger the other release pipeline
+          git tag v$RELEASE_VERSION
+          git push --tags
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+
 
       - name: Create Release
         id: create_release
