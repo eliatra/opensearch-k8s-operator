@@ -310,7 +310,7 @@ What is SmartScaler?
 
 SmartScaler is a mechanism built into the Operator that enables nodes to be safely removed from the cluster. When a node is being removed from a cluster, the safe drain process ensures that all of its data is transferred to other nodes in the cluster before the node is taken offline. This prevents any data loss or corruption that could occur if the node were simply shut down or disconnected without first transferring its data to other nodes.
 
-During the safe drain process, the node being removed is marked as "draining", which means that it will no longer receive any new requests. Instead, it will only process outstanding requests until its workload has been completed. Once all requests have been processed, the node will begin transferring its data to other nodes in the cluster. The safe drain process will continue until all data has been transferred and the node is no longer part of the cluster. Only after that, the OMC will turn down the node.
+During the safe drain process, the node being removed is marked as "draining", which means that it will no longer receive any new requests. Instead, it will only process outstanding requests until its workload has been completed. Once all requests have been processed, the node will begin transferring its data to other nodes in the cluster. The safe drain process will continue until all data has been transferred and the node is no longer part of the cluster.
 
 ### Set Java heap size
 
@@ -488,7 +488,7 @@ Note that changing the value in the secret has no direct influence on the dashbo
 
 ### Configuring a basePath
 
-When using OpenSearch behind a reverse proxy on a subpath (e.g. `/logs`) you have to configure a base path. This can be achieved by setting the base path field in the configuraiton of OpenSearch Dashboards. Behind the scenes the correct configuration options are automatically added to the dashboards configuration.
+When using OpenSearch behind a reverse proxy on a subpath (e.g. `/logs`) you have to configure a base path. This can be achieved by setting the base path field in the configuration of OpenSearch Dashboards. Behind the scenes the correct configuration options are automatically added to the dashboards configuration.
 
 ```yaml
 apiVersion: opensearch.eliatra.io/v1
@@ -521,7 +521,7 @@ spec:
 # ...
 ```
 
-To let the Operator generate the certificate, just set `tls.enable: true` and `tls.generate: true` (the other fields under `tls` can be ommitted). Again, as with the node certificates, you can supply your own CA via `caSecret.name` for the Operator to use.
+To let the Operator generate the certificate, just set `tls.enable: true` and `tls.generate: true` (the other fields under `tls` can be omitted). Again, as with the node certificates, you can supply your own CA via `caSecret.name` for the Operator to use.
 If you want to use your own certificate, you need to provide it as a Kubernetes TLS secret (with fields `tls.key` and `tls.crt`) and provide the name as `secret.name`.
 
 If you want to expose Dashboards outside of the cluster, it is recommended to use Operator-generated certificates internally and let an Ingress present a valid certificate from an accredited CA (e.g. LetsEncrypt).
@@ -538,7 +538,7 @@ The available storage options are:
 
 #### PVC
 
-The default option is persistent storage via PVCs. You can explicity define the `storageClass` if needed:
+The default option is persistent storage via PVCs. You can explicitly define the `storageClass` if needed:
 
 ```yaml
 nodePools:
@@ -941,7 +941,7 @@ The following considerations should be taken into account in order to increase t
 * It is best recommended not to apply any new changes to the cluster along with volume expansion.
 * Make sure the declared size definitions are proper and consistent, example if the `diskSize` is in `G` or `Gi`, make sure the same size definitions are followed for expansion.
 
-Note: To change the `diskSize` from `G` to `Gi` or vice-versa, first make sure data is backed up and make sure the right conversion number is identified, so that the underlying volume has the same value and then re-apply the cluster yaml. This will make sure the statefulset is re-created with right value in VolueClaimTemplates, this operation is expected to have no downtime.
+Note: To change the `diskSize` from `G` to `Gi` or vice-versa, first make sure data is backed up and make sure the right conversion number is identified, so that the underlying volume has the same value and then re-apply the cluster yaml. This will make sure the statefulset is re-created with right value in VolumeClaimTemplates, this operation is expected to have no downtime.
 
 ## User and role management
 
@@ -990,7 +990,7 @@ In addition, you must provide the name of a secret as `adminCredentialsSecret.na
 
 You must also configure TLS transport (see [Node Transport](#node-transport)). You can either let the operator generate all needed certificates or supply them yourself. If you use your own certificates you must also provide an admin certificate that the operator can use to apply the securityconfig.
 
-If you provided your own certificate for node transport communication, then you must also provide an admin client certificate (as a Kubernetes TLS secret with fields `ca.crt`, `tls.key` and `tls.crt`) as `adminSecret.name`. The DN of the certificate must be listed under `security.tls.transport.adminDn`. Be advised that the `adminDn` and `nodesDn` must be defined in a way that the admin certficate cannot be used or recognized as a node certficiate, otherwise OpenSearch will reject any authentication request using the admin certificate.
+If you provided your own certificate for node transport communication, then you must also provide an admin client certificate (as a Kubernetes TLS secret with fields `ca.crt`, `tls.key` and `tls.crt`) as `adminSecret.name`. The DN of the certificate must be listed under `security.tls.transport.adminDn`. Be advised that the `adminDn` and `nodesDn` must be defined in a way that the admin certificate cannot be used or recognized as a node certificate, otherwise OpenSearch will reject any authentication request using the admin certificate.
 
 To apply the securityconfig to the OpenSearch cluster, the Operator uses a separate Kubernetes job (named `<cluster-name>-securityconfig-update`). This job is run during the initial provisioning of the cluster. The Operator also monitors the secret with the securityconfig for any changes and then reruns the update job to apply the new config. Note that the Operator only checks for changes in certain intervals, so it might take a minute or two for the changes to be applied. If the changes are not applied after a few minutes, please use 'kubectl' to check the logs of the pod of the `<cluster-name>-securityconfig-update` job. If you have an error in your configuration it will be reported there.
 
@@ -1192,8 +1192,8 @@ spec:
     monitoring:
       enable: true # Enable or disable the monitoring plugin
       scrapeInterval: 30s # The scrape interval for Prometheus
-      monitoringUserSecret: monitoring-user-secret # Optional, name of a secret with username/password for prometheus to acces the plugin metrics endpoint with, defaults to the admin user
-      pluginUrl: https://github.com/aiven/prometheus-exporter-plugin-for-opensearch/releases/download/<YOUR_CLUSTER_VERSION>.0/prometheus-exporter-<YOUR_CLUSTER_VERSION>.0.zip # Optional, custom URL for the monitoring plugi
+      monitoringUserSecret: monitoring-user-secret # Optional, name of a secret with username/password for prometheus to access the plugin metrics endpoint with, defaults to the admin user
+      pluginUrl: https://github.com/aiven/prometheus-exporter-plugin-for-opensearch/releases/download/<YOUR_CLUSTER_VERSION>.0/prometheus-exporter-<YOUR_CLUSTER_VERSION>.0.zip # Optional, custom URL for the monitoring plugin
       tlsConfig: # Optional, use this to override the tlsConfig of the generated ServiceMonitor
         serverName: "testserver.test.local"
         insecureSkipVerify: true

@@ -45,7 +45,7 @@ The Eliatra OpenSearch Kubernetes Operator (EOKO) aims to be compatible to all s
 |------------------|----------------------------------|----------------------------------|---------|
 | 2.5              | 1.0                              | 2.8                              |         |
 
-This table only lists versions that have been explicitly tested with the operator, the operator will not prevent you from using other versions. Newer minor versions (2.x) not listed here generally also work but you should proceed with caution and test it our in a non-production environment first.
+This table only lists versions that have been explicitly tested with the operator, the operator will not prevent you from using other versions. Newer minor versions (2.x) not listed here generally also work, but you should proceed with caution and test it in a non-production environment first.
 
 ## Development
 

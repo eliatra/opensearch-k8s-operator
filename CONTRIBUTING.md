@@ -1,4 +1,4 @@
-- [Contributing to the OpenSearch K8S Operator](#contributing-to-the-opensearch-k8s-operator)
+- [Contributing to the Eliatra OpenSearch Kubernetes Operator (EOKO)](#contributing-to-the-opensearch-k8s-operator)
   - [First Things First](#first-things-first)
   - [Ways to Contribute](#ways-to-contribute)
     - [Feature Requests](#feature-requests)
@@ -9,9 +9,9 @@
   - [Writing tests](#writing-tests)
     - [Functional tests](#functional-tests)
 
-# Contributing to the OpenSearch K8S Operator
+# Contributing to the Eliatra OpenSearch Kubernetes Operator (EOKO)
 
-The OpenSearch K8S Operator is a community project that is built and maintained by people just like **you**. We're glad you're interested in helping out. There are several different ways you can do it, but before we talk about that, let's talk about how to get started.
+The EOKO is a community project that is built and maintained by people just like **you**. We're glad you're interested in helping out. There are several different ways you can do it, but before we talk about that, let's talk about how to get started.
 
 ## First Things First
 
@@ -25,11 +25,11 @@ There are several ways you can contribute to this project:
 
 ### Feature Requests
 
-If you've thought of a way that the OpenSearch K8S Operator could be better, we want to hear about it. We track feature requests using GitHub, so please feel free to open an issue which describes the feature you would like to see, why you need it, and how it should work.
+If you've thought of a way that the EOKO could be better, we want to hear about it. We track feature requests using GitHub, so please feel free to open an issue which describes the feature you would like to see, why you need it, and how it should work.
 
 ### Reporting bugs
 
-If you have the time and infrastructure, please test the operator in different environments and with different usecases. Should you find a bug, please report it using the GitHub issue tracker. Please provide the following information in your report:
+If you have the time and infrastructure, please test the EOKO in different environments and with different usecases. Should you find a bug, please report it using the GitHub issue tracker. Please provide the following information in your report:
 
 - Your environment (cloud provider, k8s distribution, etc.)
 - A description what you did, what you expected to happen and what actually happened
@@ -40,13 +40,13 @@ If you have the time and infrastructure, please test the operator in different e
 
 ### Contributing Code
 
-As with other types of contributions, the first step is to [**open an issue on GitHub**](https://github.com/opensearch-project/OpenSearch/issues/new/choose). Opening an issue before you make changes makes sure that someone else isn't already working on that particular problem. It also lets us all work together to find the right approach before you spend a bunch of time on a PR. So again, when in doubt, open an issue.
+As with other types of contributions, the first step is to [**open an issue on GitHub**](https://github.com/eliatra/opensearch-k8s-operator/issues). Opening an issue before you make changes makes sure that someone else isn't already working on that particular problem. It also lets us all work together to find the right approach before you spend a bunch of time on a PR. So again, when in doubt, open an issue.
 
 Please see the [developer docs](./docs/developing.md) for details.
 
 ## Developer Certificate of Origin
 
-The OpenSearch K8S Operator is an open source product released under the Apache 2.0 license (see either [the Apache site](https://www.apache.org/licenses/LICENSE-2.0) or the [LICENSE.txt file](./LICENSE.txt)). The Apache 2.0 license allows you to freely use, modify, distribute, and sell your own products that include Apache 2.0 licensed software.
+The EOKO is an open source product released under the Apache 2.0 license (see either [the Apache site](https://www.apache.org/licenses/LICENSE-2.0) or the [LICENSE file](./LICENSE)). The Apache 2.0 license allows you to freely use, modify, distribute, and sell your own products that include Apache 2.0 licensed software.
 
 We respect intellectual property rights of others and we want to make sure all incoming contributions are correctly attributed and licensed. A Developer Certificate of Origin (DCO) is a lightweight mechanism to do that.
 
@@ -93,7 +93,7 @@ You may type this line on your own when writing your commit messages. However, i
 
 ## Review Process
 
-We deeply appreciate everyone who takes the time to make a contribution. We will review all contributions as quickly as possible. As a reminder, [opening an issue](https://github.com/Eliatra/opensearch-k8s-operator) discussing your change before you make it is the best way to smooth the PR process. This will prevent a rejection because someone else is already working on the problem, or because the solution is incompatible with the architectural direction.
+We deeply appreciate everyone who takes the time to make a contribution. We will review all contributions as quickly as possible. As a reminder, [opening an issue](https://github.com/eliatra/opensearch-k8s-operator/issues) discussing your change before you make it is the best way to smooth the PR process. This will prevent a rejection because someone else is already working on the problem, or because the solution is incompatible with the architectural direction.
 
 During the PR process, expect that there will be some back-and-forth. Please try to respond to comments in a timely fashion, and if you don't wish to continue with the PR, let us know. If a PR takes too many iterations for its complexity or size, we may reject it. Additionally, if you stop responding we may close the PR as abandoned. In either case, if you feel this was done in error, please add a comment on the PR.
 
@@ -107,9 +107,9 @@ Testing our code is an essential part of development. It ensures the features we
 
 - Unit tests: These test a single function in isolation. They are implemented as normal go tests.
 - Integration tests: These test an entire component of the operator and its interaction with kubernetes. We use [envtest](https://book.kubebuilder.io/reference/envtest.html) to provide a minimal kubernetes api-server and verify the component under test creates/updates kubernetes objects as expected.
-- Functional tests: These test the operator as a whole and are used to verify interaction with a real kubernetes and opensearch cluster.
+- Functional tests: These test the operator as a whole and are used to verify interaction with a real kubernetes and OpenSearch cluster.
 
-As a base rule: Every change you make should be covered by a unit or integration test. Choose an integration test if your function/component interacts with kubernetes, otherwise a unit tests with optional mocks is the way to go. If the change you make does not really have logic, you should still implement a simple test to act as a regression test to make sure this feature is not later on inadvertently crippeled or that a bug is not reintroduced.
+As a base rule: Every change you make should be covered by a unit or integration test. Choose an integration test if your function/component interacts with kubernetes, otherwise a unit tests with optional mocks is the way to go. If the change you make does not really have logic, you should still implement a simple test to act as a regression test to make sure this feature is not later on inadvertently crippled or that a bug is not reintroduced.
 
 ### Functional tests
 
@@ -122,8 +122,8 @@ The flow of the functional tests is as follows:
 3. Deploy the operator using helm
 4. Run `go test`. Each test follows the same structure:
    1. Deploy an `OpenSearchCluster` object
-   2. Wait for and verify conditions in kubernetes and/or opensearch
-   3. Tear down the opensearch cluster
+   2. Wait for and verify conditions in kubernetes and/or OpenSearch
+   3. Tear down the OpenSearch cluster
 
 The flow is implemented as a Github Actions Workflow that is run for each pull request automatically. In addition you can run them locally by using the script `execute_tests.sh` in the directory `opensearch-operator/functionaltests`. You will need k3d and helm installed on your system.
 
@@ -136,4 +136,4 @@ The functionaltests module has some helper functions:
 - `ExposePodViaNodePort(selector map[string]string, namespace string, nodePort, targetPort int32)`: Creates a NodePort service to expose pods outside the k3d cluster (use a port in range `30000-30005`)
 - `CleanUpNodePort(namespace string, nodePort int32)`: Deletes a NodePort service
 
-When adding new tests plase try to follow the same structure as existing tests. Also keep in mind that functional tests take a lot longer to run than a unit test, as such only add them if needed.
+When adding new tests please try to follow the same structure as existing tests. Also keep in mind that functional tests take a lot longer to run than a unit test, as such only add them if needed.
