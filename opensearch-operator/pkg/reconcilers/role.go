@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"time"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/requests"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/services"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/requests"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/services"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
 	"github.com/cisco-open/operator-tools/pkg/reconciler"
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/types"
@@ -30,8 +30,8 @@ type RoleReconciler struct {
 	ctx      context.Context
 	osClient *services.OsClusterClient
 	recorder record.EventRecorder
-	instance *opsterv1.OpensearchRole
-	cluster  *opsterv1.OpenSearchCluster
+	instance *eliatrav1.OpensearchRole
+	cluster  *eliatrav1.OpenSearchCluster
 	logger   logr.Logger
 }
 
@@ -39,7 +39,7 @@ func NewRoleReconciler(
 	client client.Client,
 	ctx context.Context,
 	recorder record.EventRecorder,
-	instance *opsterv1.OpensearchRole,
+	instance *eliatrav1.OpensearchRole,
 	opts ...ReconcilerOption,
 ) *RoleReconciler {
 	options := ReconcilerOptions{}
@@ -64,19 +64,19 @@ func (r *RoleReconciler) Reconcile() (retResult ctrl.Result, retErr error) {
 		// When the reconciler is done, figure out what the state of the resource is
 		// is and set it in the state field accordingly.
 		err := r.client.UdateObjectStatus(r.instance, func(object client.Object) {
-			instance := object.(*opsterv1.OpensearchRole)
+			instance := object.(*eliatrav1.OpensearchRole)
 			instance.Status.Reason = reason
 			if retErr != nil {
-				instance.Status.State = opsterv1.OpensearchRoleStateError
+				instance.Status.State = eliatrav1.OpensearchRoleStateError
 			}
 			if retResult.Requeue && retResult.RequeueAfter == 10*time.Second {
-				instance.Status.State = opsterv1.OpensearchRoleStatePending
+				instance.Status.State = eliatrav1.OpensearchRoleStatePending
 			}
 			if retErr == nil && retResult.Requeue {
-				instance.Status.State = opsterv1.OpensearchRoleStateCreated
+				instance.Status.State = eliatrav1.OpensearchRoleStateCreated
 			}
 			if reason == opensearchRoleExists {
-				instance.Status.State = opsterv1.OpensearchRoleIgnored
+				instance.Status.State = eliatrav1.OpensearchRoleIgnored
 			}
 		})
 		if err != nil {
@@ -116,7 +116,7 @@ func (r *RoleReconciler) Reconcile() (retResult ctrl.Result, retErr error) {
 	} else {
 		if pointer.BoolDeref(r.updateStatus, true) {
 			retErr = r.client.UdateObjectStatus(r.instance, func(object client.Object) {
-				instance := object.(*opsterv1.OpensearchRole)
+				instance := object.(*eliatrav1.OpensearchRole)
 				instance.Status.ManagedCluster = &r.cluster.UID
 			})
 			if retErr != nil {
@@ -128,7 +128,7 @@ func (r *RoleReconciler) Reconcile() (retResult ctrl.Result, retErr error) {
 	}
 
 	// Check cluster is ready
-	if r.cluster.Status.Phase != opsterv1.PhaseRunning {
+	if r.cluster.Status.Phase != eliatrav1.PhaseRunning {
 		r.logger.Info("opensearch cluster is not running, requeueing")
 		reason = "waiting for opensearch cluster status to be running"
 		r.recorder.Event(r.instance, "Normal", opensearchPending, reason)
@@ -158,7 +158,7 @@ func (r *RoleReconciler) Reconcile() (retResult ctrl.Result, retErr error) {
 		}
 		if pointer.BoolDeref(r.updateStatus, true) {
 			retErr = r.client.UdateObjectStatus(r.instance, func(object client.Object) {
-				instance := object.(*opsterv1.OpensearchRole)
+				instance := object.(*eliatrav1.OpensearchRole)
 				instance.Status.ExistingRole = &exists
 			})
 			if retErr != nil {

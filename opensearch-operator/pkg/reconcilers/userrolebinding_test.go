@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"net/http"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/mocks/github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/requests"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/responses"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/mocks/github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/requests"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/responses"
 	"github.com/jarcoal/httpmock"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -25,25 +25,25 @@ var _ = Describe("userrolebinding reconciler", func() {
 	var (
 		transport  *httpmock.MockTransport
 		reconciler *UserRoleBindingReconciler
-		instance   *opsterv1.OpensearchUserRoleBinding
+		instance   *eliatrav1.OpensearchUserRoleBinding
 		recorder   *record.FakeRecorder
 		mockClient *k8s.MockK8sClient
 
 		// Objects
-		cluster *opsterv1.OpenSearchCluster
+		cluster *eliatrav1.OpenSearchCluster
 	)
 
 	BeforeEach(func() {
 		mockClient = k8s.NewMockK8sClient(GinkgoT())
 		transport = httpmock.NewMockTransport()
 		transport.RegisterNoResponder(httpmock.NewNotFoundResponder(failMessage))
-		instance = &opsterv1.OpensearchUserRoleBinding{
+		instance = &eliatrav1.OpensearchUserRoleBinding{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      "test-role",
 				Namespace: "test-urb",
 				UID:       types.UID("testuid"),
 			},
-			Spec: opsterv1.OpensearchUserRoleBindingSpec{
+			Spec: eliatrav1.OpensearchUserRoleBindingSpec{
 				OpensearchRef: corev1.LocalObjectReference{
 					Name: "test-cluster",
 				},
@@ -59,17 +59,17 @@ var _ = Describe("userrolebinding reconciler", func() {
 			},
 		}
 
-		cluster = &opsterv1.OpenSearchCluster{
+		cluster = &eliatrav1.OpenSearchCluster{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      "test-cluster",
 				Namespace: "test-urb",
 			},
-			Spec: opsterv1.ClusterSpec{
-				General: opsterv1.GeneralConfig{
+			Spec: eliatrav1.ClusterSpec{
+				General: eliatrav1.GeneralConfig{
 					ServiceName: "test-cluster",
 					HttpPort:    9200,
 				},
-				NodePools: []opsterv1.NodePool{
+				NodePools: []eliatrav1.NodePool{
 					{
 						Component: "node",
 						Roles: []string{
@@ -98,7 +98,7 @@ var _ = Describe("userrolebinding reconciler", func() {
 	When("cluster doesn't exist", func() {
 		BeforeEach(func() {
 			instance.Spec.OpensearchRef.Name = "doesnotexist"
-			mockClient.EXPECT().GetOpenSearchCluster(mock.Anything, mock.Anything).Return(opsterv1.OpenSearchCluster{}, NotFoundError())
+			mockClient.EXPECT().GetOpenSearchCluster(mock.Anything, mock.Anything).Return(eliatrav1.OpenSearchCluster{}, NotFoundError())
 			recorder = record.NewFakeRecorder(1)
 		})
 		It("should wait for the cluster to exist", func() {
@@ -166,8 +166,8 @@ var _ = Describe("userrolebinding reconciler", func() {
 	Context("cluster is ready", func() {
 		extraContextCalls := 1
 		BeforeEach(func() {
-			cluster.Status.Phase = opsterv1.PhaseRunning
-			cluster.Status.ComponentsStatus = []opsterv1.ComponentStatus{}
+			cluster.Status.Phase = eliatrav1.PhaseRunning
+			cluster.Status.ComponentsStatus = []eliatrav1.ComponentStatus{}
 			mockClient.EXPECT().GetOpenSearchCluster(mock.Anything, mock.Anything).Return(*cluster, nil)
 
 			transport.RegisterResponder(
@@ -846,7 +846,7 @@ var _ = Describe("userrolebinding reconciler", func() {
 		When("cluster does not exist", func() {
 			BeforeEach(func() {
 				instance.Spec.OpensearchRef.Name = "doesnotexist"
-				mockClient.EXPECT().GetOpenSearchCluster(mock.Anything, mock.Anything).Return(opsterv1.OpenSearchCluster{}, NotFoundError())
+				mockClient.EXPECT().GetOpenSearchCluster(mock.Anything, mock.Anything).Return(eliatrav1.OpenSearchCluster{}, NotFoundError())
 			})
 			It("should do nothing and exit", func() {
 				Expect(reconciler.Delete()).To(Succeed())

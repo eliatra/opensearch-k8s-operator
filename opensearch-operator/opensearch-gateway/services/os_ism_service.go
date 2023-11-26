@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/requests"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/requests"
 	"github.com/opensearch-project/opensearch-go/opensearchutil"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 )

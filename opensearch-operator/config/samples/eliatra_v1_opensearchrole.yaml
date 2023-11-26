@@ -1,0 +1,6 @@
+apiVersion: eliatra.opensearch.eliatra.io/v1
+kind: OpensearchRole
+metadata:
+  name: opensearchrole-sample
+spec:
+  # TODO(user): Add fields here

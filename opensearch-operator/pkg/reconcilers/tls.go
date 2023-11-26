@@ -7,13 +7,13 @@ import (
 	"strings"
 	"time"
 
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/builders"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/tls"
 	"github.com/Masterminds/semver"
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/builders"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/tls"
 	"github.com/cisco-open/operator-tools/pkg/reconciler"
 	"github.com/go-logr/logr"
 	"github.com/samber/lo"
@@ -29,7 +29,7 @@ import (
 type TLSReconciler struct {
 	client            k8s.K8sClient
 	reconcilerContext *ReconcilerContext
-	instance          *opsterv1.OpenSearchCluster
+	instance          *eliatrav1.OpenSearchCluster
 	logger            logr.Logger
 	pki               tls.PKI
 	recorder          record.EventRecorder
@@ -39,7 +39,7 @@ func NewTLSReconciler(
 	client client.Client,
 	ctx context.Context,
 	reconcilerContext *ReconcilerContext,
-	instance *opsterv1.OpenSearchCluster,
+	instance *eliatrav1.OpenSearchCluster,
 	opts ...reconciler.ResourceReconcilerOption,
 ) *TLSReconciler {
 	return &TLSReconciler{
@@ -102,7 +102,7 @@ func (r *TLSReconciler) handleTransport() error {
 }
 
 func (r *TLSReconciler) handleAdminCertificate() (*ctrl.Result, error) {
-	// TODO: This should be refactored in the API - https://github.com/Opster/opensearch-k8s-operator/issues/569
+	// TODO: This should be refactored in the API - https://github.com/Eliatra/opensearch-k8s-operator/issues/569
 	tlsConfig := r.instance.Spec.Security.Tls.Transport
 	clusterName := r.instance.Name
 

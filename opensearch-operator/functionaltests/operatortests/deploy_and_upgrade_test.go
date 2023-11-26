@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
@@ -49,7 +49,7 @@ var _ = Describe("DeployAndUpgrade", Ordered, func() {
 	When("Upgrading the cluster", Ordered, func() {
 		It("should accept the version upgrade", func() {
 			cluster := unstructured.Unstructured{}
-			cluster.SetGroupVersionKind(schema.GroupVersionKind{Group: "opensearch.opster.io", Version: "v1", Kind: "OpenSearchCluster"})
+			cluster.SetGroupVersionKind(schema.GroupVersionKind{Group: "opensearch.eliatra.io", Version: "v1", Kind: "OpenSearchCluster"})
 			Get(&cluster, client.ObjectKey{Name: name, Namespace: namespace}, time.Second*5)
 
 			SetNestedKey(cluster.Object, "2.3.0", "spec", "general", "version")
@@ -86,7 +86,7 @@ var _ = Describe("DeployAndUpgrade", Ordered, func() {
 					} else {
 						GinkgoWriter.Println(err)
 					}
-					cluster := &opsterv1.OpenSearchCluster{}
+					cluster := &eliatrav1.OpenSearchCluster{}
 					k8sClient.Get(context.Background(), client.ObjectKey{Name: name, Namespace: namespace}, cluster)
 					GinkgoWriter.Printf("Cluster: %+v\n", cluster.Status)
 

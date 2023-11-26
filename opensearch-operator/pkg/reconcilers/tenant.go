@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"time"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/requests"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/services"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/requests"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/services"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
 	"github.com/cisco-open/operator-tools/pkg/reconciler"
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/types"
@@ -30,8 +30,8 @@ type TenantReconciler struct {
 	ctx      context.Context
 	osClient *services.OsClusterClient
 	recorder record.EventRecorder
-	instance *opsterv1.OpensearchTenant
-	cluster  *opsterv1.OpenSearchCluster
+	instance *eliatrav1.OpensearchTenant
+	cluster  *eliatrav1.OpenSearchCluster
 	logger   logr.Logger
 }
 
@@ -39,7 +39,7 @@ func NewTenantReconciler(
 	client client.Client,
 	ctx context.Context,
 	recorder record.EventRecorder,
-	instance *opsterv1.OpensearchTenant,
+	instance *eliatrav1.OpensearchTenant,
 	opts ...ReconcilerOption,
 ) *TenantReconciler {
 	options := ReconcilerOptions{}
@@ -64,21 +64,21 @@ func (r *TenantReconciler) Reconcile() (retResult ctrl.Result, retErr error) {
 		// When the reconciler is done, figure out what the state of the resource
 		// is and set it in the state field accordingly.
 		err := r.client.UdateObjectStatus(r.instance, func(object client.Object) {
-			instance := object.(*opsterv1.OpensearchTenant)
+			instance := object.(*eliatrav1.OpensearchTenant)
 			instance.Status.Reason = reason
 			if retErr != nil {
-				instance.Status.State = opsterv1.OpensearchTenantError
+				instance.Status.State = eliatrav1.OpensearchTenantError
 			}
 			// Requeue after is 10 seconds if waiting for OpenSearch cluster
 			if retResult.Requeue && retResult.RequeueAfter == 10*time.Second {
-				instance.Status.State = opsterv1.OpensearchTenantPending
+				instance.Status.State = eliatrav1.OpensearchTenantPending
 			}
 			// Requeue is after 30 seconds for normal reconciliation after creation/update
 			if retErr == nil && retResult.RequeueAfter == 30*time.Second {
-				instance.Status.State = opsterv1.OpensearchTenantCreated
+				instance.Status.State = eliatrav1.OpensearchTenantCreated
 			}
 			if reason == opensearchTenantExists {
-				instance.Status.State = opsterv1.OpensearchTenantIgnored
+				instance.Status.State = eliatrav1.OpensearchTenantIgnored
 			}
 		})
 		if err != nil {
@@ -118,7 +118,7 @@ func (r *TenantReconciler) Reconcile() (retResult ctrl.Result, retErr error) {
 	} else {
 		if pointer.BoolDeref(r.updateStatus, true) {
 			retErr = r.client.UdateObjectStatus(r.instance, func(object client.Object) {
-				instance := object.(*opsterv1.OpensearchTenant)
+				instance := object.(*eliatrav1.OpensearchTenant)
 				instance.Status.ManagedCluster = &r.cluster.UID
 			})
 			if retErr != nil {
@@ -130,7 +130,7 @@ func (r *TenantReconciler) Reconcile() (retResult ctrl.Result, retErr error) {
 	}
 
 	// Check cluster is ready
-	if r.cluster.Status.Phase != opsterv1.PhaseRunning {
+	if r.cluster.Status.Phase != eliatrav1.PhaseRunning {
 		r.logger.Info("opensearch cluster is not running, requeueing")
 		reason = "waiting for opensearch cluster status to be running"
 		r.recorder.Event(r.instance, "Normal", opensearchPending, reason)
@@ -160,7 +160,7 @@ func (r *TenantReconciler) Reconcile() (retResult ctrl.Result, retErr error) {
 		}
 		if pointer.BoolDeref(r.updateStatus, true) {
 			retErr = r.client.UdateObjectStatus(r.instance, func(object client.Object) {
-				instance := object.(*opsterv1.OpensearchTenant)
+				instance := object.(*eliatrav1.OpensearchTenant)
 				instance.Status.ExistingTenant = &exists
 			})
 			if retErr != nil {

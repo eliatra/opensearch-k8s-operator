@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
@@ -31,7 +31,7 @@ var _ = Describe("Scaler Reconciler", func() {
 	var (
 		OpensearchCluster = ComposeOpensearchCrd(clusterName, namespace)
 		nodePool          = appsv1.StatefulSet{}
-		cluster2          = opsterv1.OpenSearchCluster{}
+		cluster2          = eliatrav1.OpenSearchCluster{}
 	)
 
 	/// ------- Creation Check phase -------

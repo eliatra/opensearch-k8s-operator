@@ -29,7 +29,7 @@ import (
 
 	monitoring "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
 	"github.com/phayes/freeport"
 
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -88,7 +88,7 @@ var _ = BeforeSuite(func() {
 
 	err = scheme.AddToScheme(scheme.Scheme)
 	Expect(err).NotTo(HaveOccurred())
-	err = opsterv1.AddToScheme(scheme.Scheme)
+	err = eliatrav1.AddToScheme(scheme.Scheme)
 	Expect(err).NotTo(HaveOccurred())
 
 	k8sClient, err = client.New(cfg, client.Options{Scheme: scheme.Scheme})

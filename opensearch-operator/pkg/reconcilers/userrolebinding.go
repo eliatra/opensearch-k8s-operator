@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"time"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/requests"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/services"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/requests"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/services"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
 	"github.com/cisco-open/operator-tools/pkg/reconciler"
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/types"
@@ -27,8 +27,8 @@ type UserRoleBindingReconciler struct {
 	ctx      context.Context
 	osClient *services.OsClusterClient
 	recorder record.EventRecorder
-	instance *opsterv1.OpensearchUserRoleBinding
-	cluster  *opsterv1.OpenSearchCluster
+	instance *eliatrav1.OpensearchUserRoleBinding
+	cluster  *eliatrav1.OpenSearchCluster
 	logger   logr.Logger
 }
 
@@ -36,7 +36,7 @@ func NewUserRoleBindingReconciler(
 	client client.Client,
 	ctx context.Context,
 	recorder record.EventRecorder,
-	instance *opsterv1.OpensearchUserRoleBinding,
+	instance *eliatrav1.OpensearchUserRoleBinding,
 	opts ...ReconcilerOption,
 ) *UserRoleBindingReconciler {
 	options := ReconcilerOptions{}
@@ -62,19 +62,19 @@ func (r *UserRoleBindingReconciler) Reconcile() (retResult ctrl.Result, retErr e
 		// When the reconciler is done, figure out what the state of the resource is
 		// is and set it in the state field accordingly.
 		err := r.client.UdateObjectStatus(r.instance, func(object client.Object) {
-			instance := object.(*opsterv1.OpensearchUserRoleBinding)
+			instance := object.(*eliatrav1.OpensearchUserRoleBinding)
 			instance.Status.Reason = reason
 			if retErr != nil {
-				instance.Status.State = opsterv1.OpensearchUserRoleBindingStateError
+				instance.Status.State = eliatrav1.OpensearchUserRoleBindingStateError
 			}
 			if retResult.Requeue && retResult.RequeueAfter == 10*time.Second {
-				instance.Status.State = opsterv1.OpensearchUserRoleBindingPending
+				instance.Status.State = eliatrav1.OpensearchUserRoleBindingPending
 			}
 			if retErr == nil && retResult.RequeueAfter == 30*time.Second {
 				instance.Status.ProvisionedRoles = instance.Spec.Roles
 				instance.Status.ProvisionedBackendRoles = instance.Spec.BackendRoles
 				instance.Status.ProvisionedUsers = instance.Spec.Users
-				instance.Status.State = opsterv1.OpensearchUserRoleBindingStateCreated
+				instance.Status.State = eliatrav1.OpensearchUserRoleBindingStateCreated
 			}
 		})
 		if err != nil {
@@ -114,7 +114,7 @@ func (r *UserRoleBindingReconciler) Reconcile() (retResult ctrl.Result, retErr e
 	} else {
 		if pointer.BoolDeref(r.updateStatus, true) {
 			retErr = r.client.UdateObjectStatus(r.instance, func(object client.Object) {
-				instance := object.(*opsterv1.OpensearchUserRoleBinding)
+				instance := object.(*eliatrav1.OpensearchUserRoleBinding)
 				instance.Status.ManagedCluster = &r.cluster.UID
 			})
 			if retErr != nil {
@@ -126,7 +126,7 @@ func (r *UserRoleBindingReconciler) Reconcile() (retResult ctrl.Result, retErr e
 	}
 
 	// Check cluster is ready
-	if r.cluster.Status.Phase != opsterv1.PhaseRunning {
+	if r.cluster.Status.Phase != eliatrav1.PhaseRunning {
 		r.logger.Info("opensearch cluster is not running, requeueing")
 		reason = "waiting for opensearch cluster status to be running"
 		r.recorder.Event(r.instance, "Normal", opensearchPending, reason)

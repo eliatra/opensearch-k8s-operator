@@ -12,7 +12,7 @@ import (
 
 // The cluster has been created using Helm outside of this test. This test verifies the presence of the resources after the cluster is created.
 var _ = Describe("DeployWithHelm", Ordered, func() {
-	name := "opensearch-cluster"
+	name := "eoko-cluster"
 	namespace := "default"
 
 	When("cluster is created using helm", Ordered, func() {

@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"time"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/requests"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/services"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/requests"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/services"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
 	"github.com/cisco-open/operator-tools/pkg/reconciler"
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/types"
@@ -31,8 +31,8 @@ type IsmPolicyReconciler struct {
 	ctx      context.Context
 	osClient *services.OsClusterClient
 	recorder record.EventRecorder
-	instance *opsterv1.OpenSearchISMPolicy
-	cluster  *opsterv1.OpenSearchCluster
+	instance *eliatrav1.OpenSearchISMPolicy
+	cluster  *eliatrav1.OpenSearchCluster
 	logger   logr.Logger
 }
 
@@ -40,7 +40,7 @@ func NewIsmReconciler(
 	ctx context.Context,
 	client client.Client,
 	recorder record.EventRecorder,
-	instance *opsterv1.OpenSearchISMPolicy,
+	instance *eliatrav1.OpenSearchISMPolicy,
 	opts ...ReconcilerOption,
 ) *IsmPolicyReconciler {
 	options := ReconcilerOptions{}
@@ -65,22 +65,22 @@ func (r *IsmPolicyReconciler) Reconcile() (retResult ctrl.Result, retErr error) 
 		// When the reconciler is done, figure out what the state of the resource
 		// is and set it in the state field accordingly.
 		err := r.client.UdateObjectStatus(r.instance, func(object client.Object) {
-			instance := object.(*opsterv1.OpenSearchISMPolicy)
+			instance := object.(*eliatrav1.OpenSearchISMPolicy)
 			instance.Status.Reason = reason
 			if retErr != nil {
-				instance.Status.State = opsterv1.OpensearchISMPolicyError
+				instance.Status.State = eliatrav1.OpensearchISMPolicyError
 			}
 			// Requeue after is 10 seconds if waiting for OpenSearch cluster
 			if retResult.Requeue && retResult.RequeueAfter == 10*time.Second {
-				instance.Status.State = opsterv1.OpensearchISMPolicyPending
+				instance.Status.State = eliatrav1.OpensearchISMPolicyPending
 			}
 			// Requeue is after 30 seconds for normal reconciliation after creation/update
 			if retErr == nil && retResult.RequeueAfter == 30*time.Second {
-				instance.Status.State = opsterv1.OpensearchISMPolicyCreated
+				instance.Status.State = eliatrav1.OpensearchISMPolicyCreated
 				instance.Status.PolicyId = policyId
 			}
 			if reason == ismPolicyExists {
-				instance.Status.State = opsterv1.OpensearchISMPolicyIgnored
+				instance.Status.State = eliatrav1.OpensearchISMPolicyIgnored
 			}
 		})
 		if err != nil {
@@ -120,7 +120,7 @@ func (r *IsmPolicyReconciler) Reconcile() (retResult ctrl.Result, retErr error) 
 	} else {
 		if pointer.BoolDeref(r.updateStatus, true) {
 			retErr = r.client.UdateObjectStatus(r.instance, func(object client.Object) {
-				instance := object.(*opsterv1.OpenSearchISMPolicy)
+				instance := object.(*eliatrav1.OpenSearchISMPolicy)
 				instance.Status.ManagedCluster = &r.cluster.UID
 			})
 			if retErr != nil {
@@ -131,7 +131,7 @@ func (r *IsmPolicyReconciler) Reconcile() (retResult ctrl.Result, retErr error) 
 		}
 	}
 	// Check cluster is ready
-	if r.cluster.Status.Phase != opsterv1.PhaseRunning {
+	if r.cluster.Status.Phase != eliatrav1.PhaseRunning {
 		r.logger.Info("opensearch cluster is not running, requeueing")
 		reason = "waiting for opensearch cluster status to be running"
 		r.recorder.Event(r.instance, "Normal", opensearchPending, reason)
@@ -165,7 +165,7 @@ func (r *IsmPolicyReconciler) Reconcile() (retResult ctrl.Result, retErr error) 
 		}
 		if pointer.BoolDeref(r.updateStatus, true) {
 			retErr = r.client.UdateObjectStatus(r.instance, func(object client.Object) {
-				instance := object.(*opsterv1.OpenSearchISMPolicy)
+				instance := object.(*eliatrav1.OpenSearchISMPolicy)
 				instance.Status.ExistingISMPolicy = &exists
 			})
 			if retErr != nil {
@@ -320,7 +320,7 @@ func (r *IsmPolicyReconciler) CreateISMPolicyRequest() (*requests.Policy, error)
 						newAction := requests.AliasAction{}
 						newAliasDetails := requests.AliasDetails{}
 
-						copyAliasDetails := func(src *opsterv1.AliasDetails) {
+						copyAliasDetails := func(src *eliatrav1.AliasDetails) {
 							newAliasDetails.Aliases = src.Aliases
 							newAliasDetails.Index = src.Index
 							newAliasDetails.IsWriteIndex = src.IsWriteIndex

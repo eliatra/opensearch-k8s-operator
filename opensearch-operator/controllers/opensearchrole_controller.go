@@ -27,8 +27,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers"
 )
 
 // OpensearchRoleReconciler reconciles a OpensearchRole object
@@ -36,13 +36,13 @@ type OpensearchRoleReconciler struct {
 	client.Client
 	Scheme   *runtime.Scheme
 	Recorder record.EventRecorder
-	Instance *opsterv1.OpensearchRole
+	Instance *eliatrav1.OpensearchRole
 	logr.Logger
 }
 
-//+kubebuilder:rbac:groups=opensearch.opster.io,resources=opensearchroles,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=opensearch.opster.io,resources=opensearchroles/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=opensearch.opster.io,resources=opensearchroles/finalizers,verbs=update
+//+kubebuilder:rbac:groups=opensearch.eliatra.io,resources=opensearchroles,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=opensearch.eliatra.io,resources=opensearchroles/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=opensearch.eliatra.io,resources=opensearchroles/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -50,7 +50,7 @@ func (r *OpensearchRoleReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	r.Logger = log.FromContext(ctx).WithValues("role", req.NamespacedName)
 	r.Logger.Info("Reconciling OpensearchRole")
 
-	r.Instance = &opsterv1.OpensearchRole{}
+	r.Instance = &eliatrav1.OpensearchRole{}
 	err := r.Get(ctx, req.NamespacedName, r.Instance)
 	if err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
@@ -87,7 +87,7 @@ func (r *OpensearchRoleReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 // SetupWithManager sets up the controller with the Manager.
 func (r *OpensearchRoleReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&opsterv1.OpensearchRole{}).
-		Owns(&opsterv1.OpenSearchCluster{}). // Get notified when opensearch clusters change
+		For(&eliatrav1.OpensearchRole{}).
+		Owns(&eliatrav1.OpenSearchCluster{}). // Get notified when opensearch clusters change
 		Complete(r)
 }

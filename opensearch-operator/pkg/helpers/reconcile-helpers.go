@@ -5,14 +5,14 @@ import (
 	"path"
 	"strings"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
 	"github.com/hashicorp/go-version"
 	"k8s.io/utils/pointer"
 )
 
-func ResolveInitHelperImage(cr *opsterv1.OpenSearchCluster) (result opsterv1.ImageSpec) {
-	defaultRepo := "public.ecr.aws/opsterio"
-	defaultImage := "busybox"
+func ResolveInitHelperImage(cr *eliatrav1.OpenSearchCluster) (result eliatrav1.ImageSpec) {
+	defaultRepo := "docker.io/eliatra"
+	defaultImage := "eoko-busybox"
 	defaultVersion := "1.27.2-buildx"
 
 	// If a custom InitHelper image is specified, use it.
@@ -36,7 +36,7 @@ func ResolveInitHelperImage(cr *opsterv1.OpenSearchCluster) (result opsterv1.Ima
 	return
 }
 
-func ResolveImage(cr *opsterv1.OpenSearchCluster, nodePool *opsterv1.NodePool) (result opsterv1.ImageSpec) {
+func ResolveImage(cr *eliatrav1.OpenSearchCluster, nodePool *eliatrav1.NodePool) (result eliatrav1.ImageSpec) {
 	defaultRepo := "docker.io/opensearchproject"
 	defaultImage := "opensearch"
 
@@ -61,7 +61,7 @@ func ResolveImage(cr *opsterv1.OpenSearchCluster, nodePool *opsterv1.NodePool) (
 	return
 }
 
-func ResolveDashboardsImage(cr *opsterv1.OpenSearchCluster) (result opsterv1.ImageSpec) {
+func ResolveDashboardsImage(cr *eliatrav1.OpenSearchCluster) (result eliatrav1.ImageSpec) {
 	defaultRepo := "docker.io/opensearchproject"
 	defaultImage := "opensearch-dashboards"
 
@@ -83,7 +83,7 @@ func ResolveDashboardsImage(cr *opsterv1.OpenSearchCluster) (result opsterv1.Ima
 	return
 }
 
-func useCustomImage(customImageSpec *opsterv1.ImageSpec, result *opsterv1.ImageSpec) bool {
+func useCustomImage(customImageSpec *eliatrav1.ImageSpec, result *eliatrav1.ImageSpec) bool {
 	if customImageSpec != nil {
 		if customImageSpec.ImagePullPolicy != nil {
 			result.ImagePullPolicy = customImageSpec.ImagePullPolicy
@@ -101,7 +101,7 @@ func useCustomImage(customImageSpec *opsterv1.ImageSpec, result *opsterv1.ImageS
 }
 
 // Function to help identify httpPort, securityConfigPort and securityConfigPath for 1.x and 2.x OpenSearch Operator.
-func VersionCheck(instance *opsterv1.OpenSearchCluster) (int32, int32, string) {
+func VersionCheck(instance *eliatrav1.OpenSearchCluster) (int32, int32, string) {
 	var httpPort int32
 	var securityConfigPort int32
 	var securityConfigPath string

@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/builders"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/tls"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/builders"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/tls"
 	"github.com/cisco-open/operator-tools/pkg/reconciler"
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
@@ -24,7 +24,7 @@ type DashboardsReconciler struct {
 	client            k8s.K8sClient
 	recorder          record.EventRecorder
 	reconcilerContext *ReconcilerContext
-	instance          *opsterv1.OpenSearchCluster
+	instance          *eliatrav1.OpenSearchCluster
 	logger            logr.Logger
 	pki               tls.PKI
 }
@@ -34,7 +34,7 @@ func NewDashboardsReconciler(
 	ctx context.Context,
 	recorder record.EventRecorder,
 	reconcilerContext *ReconcilerContext,
-	instance *opsterv1.OpenSearchCluster,
+	instance *eliatrav1.OpenSearchCluster,
 	opts ...reconciler.ResourceReconcilerOption,
 ) *DashboardsReconciler {
 	return &DashboardsReconciler{

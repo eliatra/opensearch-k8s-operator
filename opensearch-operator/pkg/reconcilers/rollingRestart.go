@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"time"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/services"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/builders"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/opensearch-gateway/services"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/builders"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/util"
 	"github.com/cisco-open/operator-tools/pkg/reconciler"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -34,7 +34,7 @@ type RollingRestartReconciler struct {
 	osClient          *services.OsClusterClient
 	recorder          record.EventRecorder
 	reconcilerContext *ReconcilerContext
-	instance          *opsterv1.OpenSearchCluster
+	instance          *eliatrav1.OpenSearchCluster
 }
 
 func NewRollingRestartReconciler(
@@ -42,7 +42,7 @@ func NewRollingRestartReconciler(
 	ctx context.Context,
 	recorder record.EventRecorder,
 	reconcilerContext *ReconcilerContext,
-	instance *opsterv1.OpenSearchCluster,
+	instance *eliatrav1.OpenSearchCluster,
 	opts ...reconciler.ResourceReconcilerOption,
 ) *RollingRestartReconciler {
 	return &RollingRestartReconciler{
@@ -222,14 +222,14 @@ func (r *RollingRestartReconciler) restartStatefulSetPod(sts *appsv1.StatefulSet
 }
 
 func (r *RollingRestartReconciler) updateStatus(status string) error {
-	return UpdateComponentStatus(r.client, r.instance, &opsterv1.ComponentStatus{
+	return UpdateComponentStatus(r.client, r.instance, &eliatrav1.ComponentStatus{
 		Component:   componentName,
 		Status:      status,
 		Description: "",
 	})
 }
 
-func (r *RollingRestartReconciler) findStatus() *opsterv1.ComponentStatus {
+func (r *RollingRestartReconciler) findStatus() *eliatrav1.ComponentStatus {
 	for _, component := range r.instance.Status.ComponentsStatus {
 		if component.Component == componentName {
 			return &component

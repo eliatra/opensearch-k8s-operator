@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/mocks/github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/mocks/github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/stretchr/testify/mock"
@@ -17,7 +17,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log"
 )
 
-func newTLSReconciler(k8sClient *k8s.MockK8sClient, spec *opsterv1.OpenSearchCluster) (*ReconcilerContext, *TLSReconciler) {
+func newTLSReconciler(k8sClient *k8s.MockK8sClient, spec *eliatrav1.OpenSearchCluster) (*ReconcilerContext, *TLSReconciler) {
 	reconcilerContext := NewReconcilerContext(&helpers.MockEventRecorder{}, spec, spec.Spec.NodePools)
 	underTest := &TLSReconciler{
 		client:            k8sClient,
@@ -39,13 +39,13 @@ var _ = Describe("TLS Controller", func() {
 			transportSecretName := clusterName + "-transport-cert"
 			httpSecretName := clusterName + "-http-cert"
 			adminSecretName := clusterName + "-admin-cert"
-			spec := opsterv1.OpenSearchCluster{
+			spec := eliatrav1.OpenSearchCluster{
 				ObjectMeta: metav1.ObjectMeta{Name: clusterName, Namespace: clusterName, UID: "dummyuid"},
-				Spec: opsterv1.ClusterSpec{
-					General: opsterv1.GeneralConfig{},
-					Security: &opsterv1.Security{Tls: &opsterv1.TlsConfig{
-						Transport: &opsterv1.TlsConfigTransport{Generate: true},
-						Http:      &opsterv1.TlsConfigHttp{Generate: true},
+				Spec: eliatrav1.ClusterSpec{
+					General: eliatrav1.GeneralConfig{},
+					Security: &eliatrav1.Security{Tls: &eliatrav1.TlsConfig{
+						Transport: &eliatrav1.TlsConfigTransport{Generate: true},
+						Http:      &eliatrav1.TlsConfigHttp{Generate: true},
 					}},
 				},
 			}
@@ -84,15 +84,15 @@ var _ = Describe("TLS Controller", func() {
 			transportSecretName := clusterName + "-transport-cert"
 			httpSecretName := clusterName + "-http-cert"
 			adminSecretName := clusterName + "-admin-cert"
-			spec := opsterv1.OpenSearchCluster{
+			spec := eliatrav1.OpenSearchCluster{
 				ObjectMeta: metav1.ObjectMeta{Name: clusterName, Namespace: clusterName, UID: "dummyuid"},
-				Spec: opsterv1.ClusterSpec{
-					General: opsterv1.GeneralConfig{},
-					Security: &opsterv1.Security{Tls: &opsterv1.TlsConfig{
-						Transport: &opsterv1.TlsConfigTransport{Generate: true, PerNode: true},
-						Http:      &opsterv1.TlsConfigHttp{Generate: true},
+				Spec: eliatrav1.ClusterSpec{
+					General: eliatrav1.GeneralConfig{},
+					Security: &eliatrav1.Security{Tls: &eliatrav1.TlsConfig{
+						Transport: &eliatrav1.TlsConfigTransport{Generate: true, PerNode: true},
+						Http:      &eliatrav1.TlsConfigHttp{Generate: true},
 					}},
-					NodePools: []opsterv1.NodePool{
+					NodePools: []eliatrav1.NodePool{
 						{
 							Component: "masters",
 							Replicas:  3,
@@ -152,21 +152,21 @@ var _ = Describe("TLS Controller", func() {
 	Context("When Reconciling the TLS configuration with external certificates", func() {
 		It("Should not create secrets but only mount them", func() {
 			clusterName := "tls-test-existingsecrets"
-			spec := opsterv1.OpenSearchCluster{
+			spec := eliatrav1.OpenSearchCluster{
 				ObjectMeta: metav1.ObjectMeta{Name: clusterName, Namespace: clusterName, UID: "dummyuid"},
-				Spec: opsterv1.ClusterSpec{General: opsterv1.GeneralConfig{Version: "2.8.0"}, Security: &opsterv1.Security{Tls: &opsterv1.TlsConfig{
-					Transport: &opsterv1.TlsConfigTransport{
+				Spec: eliatrav1.ClusterSpec{General: eliatrav1.GeneralConfig{Version: "2.8.0"}, Security: &eliatrav1.Security{Tls: &eliatrav1.TlsConfig{
+					Transport: &eliatrav1.TlsConfigTransport{
 						Generate: false,
-						TlsCertificateConfig: opsterv1.TlsCertificateConfig{
+						TlsCertificateConfig: eliatrav1.TlsCertificateConfig{
 							Secret:   corev1.LocalObjectReference{Name: "cert-transport"},
 							CaSecret: corev1.LocalObjectReference{Name: "casecret-transport"},
 						},
 						NodesDn: []string{"CN=mycn", "CN=othercn"},
 						AdminDn: []string{"CN=admin1", "CN=admin2"},
 					},
-					Http: &opsterv1.TlsConfigHttp{
+					Http: &eliatrav1.TlsConfigHttp{
 						Generate: false,
-						TlsCertificateConfig: opsterv1.TlsCertificateConfig{
+						TlsCertificateConfig: eliatrav1.TlsCertificateConfig{
 							Secret:   corev1.LocalObjectReference{Name: "cert-http"},
 							CaSecret: corev1.LocalObjectReference{Name: "casecret-http"},
 						},
@@ -199,20 +199,20 @@ var _ = Describe("TLS Controller", func() {
 	Context("When Reconciling the TLS configuration with external per-node certificates", func() {
 		It("Should not create secrets but only mount them", func() {
 			clusterName := "tls-test-existingsecretspernode"
-			spec := opsterv1.OpenSearchCluster{
+			spec := eliatrav1.OpenSearchCluster{
 				ObjectMeta: metav1.ObjectMeta{Name: clusterName, Namespace: clusterName, UID: "dummyuid"},
-				Spec: opsterv1.ClusterSpec{General: opsterv1.GeneralConfig{}, Security: &opsterv1.Security{Tls: &opsterv1.TlsConfig{
-					Transport: &opsterv1.TlsConfigTransport{
+				Spec: eliatrav1.ClusterSpec{General: eliatrav1.GeneralConfig{}, Security: &eliatrav1.Security{Tls: &eliatrav1.TlsConfig{
+					Transport: &eliatrav1.TlsConfigTransport{
 						Generate: false,
 						PerNode:  true,
-						TlsCertificateConfig: opsterv1.TlsCertificateConfig{
+						TlsCertificateConfig: eliatrav1.TlsCertificateConfig{
 							Secret: corev1.LocalObjectReference{Name: "my-transport-certs"},
 						},
 						NodesDn: []string{"CN=mycn", "CN=othercn"},
 					},
-					Http: &opsterv1.TlsConfigHttp{
+					Http: &eliatrav1.TlsConfigHttp{
 						Generate: false,
-						TlsCertificateConfig: opsterv1.TlsCertificateConfig{
+						TlsCertificateConfig: eliatrav1.TlsCertificateConfig{
 							Secret: corev1.LocalObjectReference{Name: "my-http-certs"},
 						},
 					},
@@ -237,19 +237,19 @@ var _ = Describe("TLS Controller", func() {
 		It("Should create certificates using that CA", func() {
 			clusterName := "tls-withca"
 			caSecretName := clusterName + "-myca"
-			spec := opsterv1.OpenSearchCluster{
+			spec := eliatrav1.OpenSearchCluster{
 				ObjectMeta: metav1.ObjectMeta{Name: clusterName, Namespace: clusterName, UID: "dummyuid"},
-				Spec: opsterv1.ClusterSpec{General: opsterv1.GeneralConfig{Version: "2.8.0"}, Security: &opsterv1.Security{Tls: &opsterv1.TlsConfig{
-					Transport: &opsterv1.TlsConfigTransport{
+				Spec: eliatrav1.ClusterSpec{General: eliatrav1.GeneralConfig{Version: "2.8.0"}, Security: &eliatrav1.Security{Tls: &eliatrav1.TlsConfig{
+					Transport: &eliatrav1.TlsConfigTransport{
 						Generate: true,
 						PerNode:  true,
-						TlsCertificateConfig: opsterv1.TlsCertificateConfig{
+						TlsCertificateConfig: eliatrav1.TlsCertificateConfig{
 							CaSecret: corev1.LocalObjectReference{Name: caSecretName},
 						},
 					},
-					Http: &opsterv1.TlsConfigHttp{
+					Http: &eliatrav1.TlsConfigHttp{
 						Generate: true,
-						TlsCertificateConfig: opsterv1.TlsCertificateConfig{
+						TlsCertificateConfig: eliatrav1.TlsCertificateConfig{
 							CaSecret: corev1.LocalObjectReference{Name: caSecretName},
 						},
 					},

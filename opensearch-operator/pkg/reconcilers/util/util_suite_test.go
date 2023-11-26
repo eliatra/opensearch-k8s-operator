@@ -3,7 +3,7 @@ package util
 import (
 	"testing"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"k8s.io/client-go/kubernetes/scheme"
@@ -22,7 +22,7 @@ var _ = BeforeSuite(func() {
 
 	err := scheme.AddToScheme(scheme.Scheme)
 	Expect(err).NotTo(HaveOccurred())
-	err = opsterv1.AddToScheme(scheme.Scheme)
+	err = eliatrav1.AddToScheme(scheme.Scheme)
 	Expect(err).NotTo(HaveOccurred())
 })
 

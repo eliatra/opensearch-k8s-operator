@@ -8,8 +8,8 @@ import (
 
 	policyv1 "k8s.io/api/policy/v1"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
 	. "github.com/kralicky/kmatch"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -155,7 +155,7 @@ var _ = Describe("Cluster Reconciler", func() {
 			for _, nodePool := range OpensearchCluster.Spec.NodePools {
 				wg.Add(1)
 				By(fmt.Sprintf("checking %s nodepool", nodePool.Component))
-				go func(nodePool opsterv1.NodePool) {
+				go func(nodePool eliatrav1.NodePool) {
 					defer GinkgoRecover()
 					defer wg.Done()
 					Eventually(Object(&appsv1.StatefulSet{
@@ -263,7 +263,7 @@ var _ = Describe("Cluster Reconciler", func() {
 			for _, nodePool := range OpensearchCluster.Spec.NodePools {
 				wg.Add(1)
 				By(fmt.Sprintf("checking %s nodepool initial master", nodePool.Component))
-				go func(nodePool opsterv1.NodePool) {
+				go func(nodePool eliatrav1.NodePool) {
 					defer GinkgoRecover()
 					defer wg.Done()
 					Eventually(func() []corev1.EnvVar {
@@ -313,7 +313,7 @@ var _ = Describe("Cluster Reconciler", func() {
 			for _, nodePool := range OpensearchCluster.Spec.NodePools {
 				wg.Add(1)
 				By(fmt.Sprintf("checking %s nodepool initial master", nodePool.Component))
-				go func(nodePool opsterv1.NodePool) {
+				go func(nodePool eliatrav1.NodePool) {
 					defer GinkgoRecover()
 					defer wg.Done()
 					Eventually(func() []corev1.EnvVar {
@@ -403,7 +403,7 @@ var _ = Describe("Cluster Reconciler", func() {
 
 	When("A node pool is upgrading", func() {
 		Specify("updating the status should succeed", func() {
-			status := opsterv1.ComponentStatus{
+			status := eliatrav1.ComponentStatus{
 				Component:   "Upgrader",
 				Description: "nodes",
 				Status:      "Upgrading",
@@ -448,17 +448,17 @@ var _ = Describe("Cluster Reconciler", func() {
 	})
 	When("a cluster is upgraded", func() {
 		Specify("updating the status should succeed", func() {
-			currentStatus := opsterv1.ComponentStatus{
+			currentStatus := eliatrav1.ComponentStatus{
 				Component:   "Upgrader",
 				Status:      "Upgrading",
 				Description: "nodes",
 			}
-			componentStatus := opsterv1.ComponentStatus{
+			componentStatus := eliatrav1.ComponentStatus{
 				Component:   "Upgrader",
 				Status:      "Upgraded",
 				Description: "nodes",
 			}
-			masterComponentStatus := opsterv1.ComponentStatus{
+			masterComponentStatus := eliatrav1.ComponentStatus{
 				Component:   "Upgrader",
 				Status:      "Upgraded",
 				Description: "master",
@@ -490,7 +490,7 @@ var _ = Describe("Cluster Reconciler", func() {
 			wg := sync.WaitGroup{}
 			for _, nodePool := range OpensearchCluster.Spec.NodePools {
 				wg.Add(1)
-				go func(nodePool opsterv1.NodePool) {
+				go func(nodePool eliatrav1.NodePool) {
 					defer GinkgoRecover()
 					defer wg.Done()
 					Eventually(func() bool {

@@ -6,7 +6,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/util/intstr"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -14,7 +14,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func CreateNamespace(k8sClient client.Client, cluster *opsterv1.OpenSearchCluster) error {
+func CreateNamespace(k8sClient client.Client, cluster *eliatrav1.OpenSearchCluster) error {
 	ns := corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: cluster.Name}}
 	return k8sClient.Create(context.Background(), &ns)
 }
@@ -76,7 +76,7 @@ func IsConfigMapDeleted(k8sClient client.Client, name string, namespace string) 
 	return err != nil
 }
 
-func HasOwnerReference(object client.Object, owner *opsterv1.OpenSearchCluster) bool {
+func HasOwnerReference(object client.Object, owner *eliatrav1.OpenSearchCluster) bool {
 	for _, ownerRef := range object.GetOwnerReferences() {
 		if ownerRef.Name == owner.ObjectMeta.Name {
 			return true
@@ -94,19 +94,19 @@ func ArrayElementContains(array []string, content string) bool {
 	return false
 }
 
-func ComposeOpensearchCrd(clusterName string, namespace string) opsterv1.OpenSearchCluster {
-	OpensearchCluster := &opsterv1.OpenSearchCluster{
+func ComposeOpensearchCrd(clusterName string, namespace string) eliatrav1.OpenSearchCluster {
+	OpensearchCluster := &eliatrav1.OpenSearchCluster{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "OpenSearchCluster",
-			APIVersion: "opensearch.opster.io/v1",
+			APIVersion: "opensearch.eliatra.io/v1",
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      clusterName,
 			Namespace: namespace,
 		},
-		Spec: opsterv1.ClusterSpec{
-			General: opsterv1.GeneralConfig{
-				Monitoring:  opsterv1.MonitoringConfig{Enable: true, ScrapeInterval: "35s", TLSConfig: &opsterv1.MonitoringConfigTLS{InsecureSkipVerify: true, ServerName: "foo.bar"}},
+		Spec: eliatrav1.ClusterSpec{
+			General: eliatrav1.GeneralConfig{
+				Monitoring:  eliatrav1.MonitoringConfig{Enable: true, ScrapeInterval: "35s", TLSConfig: &eliatrav1.MonitoringConfigTLS{InsecureSkipVerify: true, ServerName: "foo.bar"}},
 				HttpPort:    9200,
 				Vendor:      "opensearch",
 				Version:     "2.0.0",
@@ -115,7 +115,7 @@ func ComposeOpensearchCrd(clusterName string, namespace string) opsterv1.OpenSea
 				AdditionalConfig: map[string]string{
 					"foo": "bar",
 				},
-				AdditionalVolumes: []opsterv1.AdditionalVolume{
+				AdditionalVolumes: []eliatrav1.AdditionalVolume{
 					{
 						Name: "test-secret",
 						Path: "/opt/test-secret",
@@ -142,12 +142,12 @@ func ComposeOpensearchCrd(clusterName string, namespace string) opsterv1.OpenSea
 					},
 				},
 			},
-			ConfMgmt: opsterv1.ConfMgmt{
+			ConfMgmt: eliatrav1.ConfMgmt{
 				AutoScaler:  false,
 				VerUpdate:   false,
 				SmartScaler: false,
 			},
-			Bootstrap: opsterv1.BootstrapConfig{
+			Bootstrap: eliatrav1.BootstrapConfig{
 				Resources: corev1.ResourceRequirements{
 					Limits: corev1.ResourceList{
 						corev1.ResourceCPU:    resource.MustParse("125m"),
@@ -161,7 +161,7 @@ func ComposeOpensearchCrd(clusterName string, namespace string) opsterv1.OpenSea
 					Value:    "bar",
 				}},
 			},
-			Dashboards: opsterv1.DashboardsConfig{
+			Dashboards: eliatrav1.DashboardsConfig{
 				Enable:   true,
 				Replicas: 3,
 				Version:  "2.0.0",
@@ -182,9 +182,9 @@ func ComposeOpensearchCrd(clusterName string, namespace string) opsterv1.OpenSea
 				},
 				Affinity: &corev1.Affinity{},
 			},
-			NodePools: []opsterv1.NodePool{{
+			NodePools: []eliatrav1.NodePool{{
 				Component: "master",
-				Pdb: &opsterv1.PdbConfig{
+				Pdb: &eliatrav1.PdbConfig{
 					Enable: true,
 					MinAvailable: &intstr.IntOrString{
 						IntVal: 3,
@@ -215,7 +215,7 @@ func ComposeOpensearchCrd(clusterName string, namespace string) opsterv1.OpenSea
 					"master",
 					"data",
 				},
-				Persistence: &opsterv1.PersistenceConfig{PersistenceSource: opsterv1.PersistenceSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
+				Persistence: &eliatrav1.PersistenceConfig{PersistenceSource: eliatrav1.PersistenceSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
 			}, {
 				Component: "nodes",
 				Replicas:  3,
@@ -229,7 +229,7 @@ func ComposeOpensearchCrd(clusterName string, namespace string) opsterv1.OpenSea
 				Roles: []string{
 					"data",
 				},
-				Persistence: &opsterv1.PersistenceConfig{PersistenceSource: opsterv1.PersistenceSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
+				Persistence: &eliatrav1.PersistenceConfig{PersistenceSource: eliatrav1.PersistenceSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
 			}, {
 				Component: "client",
 				Replicas:  3,
@@ -254,11 +254,11 @@ func ComposeOpensearchCrd(clusterName string, namespace string) opsterv1.OpenSea
 					{Name: "qux", Value: "qut"},
 					{Name: "quuxe", ValueFrom: &corev1.EnvVarSource{FieldRef: &corev1.ObjectFieldSelector{FieldPath: "metadata.labels['quux']"}}},
 				},
-				Persistence: &opsterv1.PersistenceConfig{PersistenceSource: opsterv1.PersistenceSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
+				Persistence: &eliatrav1.PersistenceConfig{PersistenceSource: eliatrav1.PersistenceSource{EmptyDir: &corev1.EmptyDirVolumeSource{}}},
 			}},
 		},
-		Status: opsterv1.ClusterStatus{
-			ComponentsStatus: []opsterv1.ComponentStatus{
+		Status: eliatrav1.ClusterStatus{
+			ComponentsStatus: []eliatrav1.ComponentStatus{
 				{
 					Component:   "",
 					Status:      "",

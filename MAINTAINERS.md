@@ -1,5 +1,12 @@
 # Maintainers
 
+
+| Maintainer | GitHub ID | Affiliation |
+| --------------- | --------- | ----------- |
+
+
+# Previous Maintainers (Opster)
+
 | Maintainer | GitHub ID | Affiliation |
 | --------------- | --------- | ----------- |
 | Idan Levy | [idanl21](https://github.com/idanl21) | Opster |
@@ -27,4 +34,4 @@ After the workflow has completed, navigate to releases and edit the new release.
 
 In case it is needed you can also manually tag a commit for release, this will trigger a workflow that stars with the "Build and push the docker image" step. Make sure CRDs are up-to-date in the helm chart.
 
-After releasing a new version add it to the compatiblity matrix in the [README](README.md).
+After releasing a new version add it to the compatibility matrix in the [README](README.md).

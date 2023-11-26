@@ -92,7 +92,7 @@ Note that for some features the operator expects to be able to communicate direc
 
 * Run `make docker-build` to build the docker image
 * If needed import the image into your cluster (for k3d run `k3d image import controller:latest`)
-* Deploy the operator with helm by running `helm install opensearch-operator ../charts/opensearch-operator --set manager.image.repository=controller --set manager.image.tag=latest --set manager.image.pullPolicy=IfNotPresent`
+* Deploy the operator with helm by running `helm install eoko ../charts/opensearch-operator --set manager.image.repository=controller --set manager.image.tag=latest --set manager.image.pullPolicy=IfNotPresent`
 * Apply your `OpenSearchCluster` YAML
 
 To deploy a new version simply rebuild and reimport the docker image and restart the controller (for example by deleting the running pod).
@@ -117,7 +117,7 @@ All PRs must conform to the following rules:
 * If you make changes to the CRD the CRD YAMLs must be updated (via `make manifests`) and also copied into the helm chart:
 
     ```bash
-        cp opensearch-operator/config/crd/bases/opensearch.opster.io_*.yaml charts/opensearch-operator/files/
+        cp opensearch-operator/config/crd/bases/opensearch.eliatra.io_*.yaml charts/opensearch-operator/files/
     ```
 
 * Changes to the CRD must be documented in the [CRD reference](./designs/crd.md)

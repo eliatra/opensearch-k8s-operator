@@ -8,10 +8,10 @@ import (
 	"sort"
 	"time"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/builders"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/builders"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/helpers"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
 	"github.com/cisco-open/operator-tools/pkg/reconciler"
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
@@ -66,7 +66,7 @@ type SecurityconfigReconciler struct {
 	client            k8s.K8sClient
 	recorder          record.EventRecorder
 	reconcilerContext *ReconcilerContext
-	instance          *opsterv1.OpenSearchCluster
+	instance          *eliatrav1.OpenSearchCluster
 	logger            logr.Logger
 }
 
@@ -75,7 +75,7 @@ func NewSecurityconfigReconciler(
 	ctx context.Context,
 	recorder record.EventRecorder,
 	reconcilerContext *ReconcilerContext,
-	instance *opsterv1.OpenSearchCluster,
+	instance *eliatrav1.OpenSearchCluster,
 	opts ...reconciler.ResourceReconcilerOption,
 ) *SecurityconfigReconciler {
 	return &SecurityconfigReconciler{
@@ -185,7 +185,7 @@ func (r *SecurityconfigReconciler) Reconcile() (ctrl.Result, error) {
 
 // BuildCmdArg builds the command for the securityconfig-update job for each individual ymls present in the
 // securityconfig secret. yml files which are not present in the secret are not applied/updated
-func BuildCmdArg(instance *opsterv1.OpenSearchCluster, secret *corev1.Secret, log logr.Logger) string {
+func BuildCmdArg(instance *eliatrav1.OpenSearchCluster, secret *corev1.Secret, log logr.Logger) string {
 	clusterHostName := BuildClusterSvcHostName(instance)
 	httpPort, securityConfigPort, securityconfigPath := helpers.VersionCheck(instance)
 
@@ -256,7 +256,7 @@ func (r *SecurityconfigReconciler) DeleteResources() (ctrl.Result, error) {
 	return result.Result, result.Err
 }
 
-func (r *SecurityconfigReconciler) securityconfigSubpaths(instance *opsterv1.OpenSearchCluster, secret *corev1.Secret) error {
+func (r *SecurityconfigReconciler) securityconfigSubpaths(instance *eliatrav1.OpenSearchCluster, secret *corev1.Secret) error {
 	r.reconcilerContext.Volumes = append(r.reconcilerContext.Volumes, corev1.Volume{
 		Name: "securityconfig",
 		VolumeSource: corev1.VolumeSource{
@@ -285,6 +285,6 @@ func (r *SecurityconfigReconciler) securityconfigSubpaths(instance *opsterv1.Ope
 }
 
 // BuildClusterSvcHostName builds the cluster host name as {svc-name}.{namespace}.svc.{dns-base}
-func BuildClusterSvcHostName(instance *opsterv1.OpenSearchCluster) string {
+func BuildClusterSvcHostName(instance *eliatrav1.OpenSearchCluster) string {
 	return fmt.Sprintf("%s.svc.%s", builders.DnsOfService(instance), helpers.ClusterDnsBase())
 }

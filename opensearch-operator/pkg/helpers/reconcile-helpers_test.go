@@ -1,16 +1,16 @@
 package helpers
 
 import (
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 
 var _ = DescribeTable("versionCheck reconciler",
 	func(version string, specifiedHttpPort int32, expectedHttpPort int32, expectedSecurityConfigPort int32, expectedSecurityConfigPath string) {
-		instance := &opsterv1.OpenSearchCluster{
-			Spec: opsterv1.ClusterSpec{
-				General: opsterv1.GeneralConfig{
+		instance := &eliatrav1.OpenSearchCluster{
+			Spec: eliatrav1.ClusterSpec{
+				General: eliatrav1.GeneralConfig{
 					Version:  version,
 					HttpPort: specifiedHttpPort,
 				},

@@ -1,0 +1,6 @@
+Eliatra OpenSearch Kubernetes Operator (EOKO) (https://github.com/eliatra/opensearch-k8s-operator)
+Copyright Eliatra Contributors
+
+This product includes software developed by
+Opster (https://opster.com/).
+Copyright 2019-2023 Opster Ltd.

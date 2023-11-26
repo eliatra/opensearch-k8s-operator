@@ -110,14 +110,14 @@ rules:
   - update
   - watch
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - events
   verbs:
   - create
   - patch
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - ismpolicies
   verbs:
@@ -129,13 +129,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - ismpolicies/finalizers
   verbs:
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - ismpolicies/status
   verbs:
@@ -143,7 +143,7 @@ rules:
   - patch
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchactiongroups
   verbs:
@@ -155,13 +155,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchactiongroups/finalizers
   verbs:
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchactiongroups/status
   verbs:
@@ -169,7 +169,7 @@ rules:
   - patch
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchclusters
   verbs:
@@ -181,13 +181,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchclusters/finalizers
   verbs:
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchclusters/status
   verbs:
@@ -195,7 +195,7 @@ rules:
   - patch
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchcomponenttemplates
   verbs:
@@ -207,13 +207,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchcomponenttemplates/finalizers
   verbs:
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchcomponenttemplates/status
   verbs:
@@ -221,7 +221,7 @@ rules:
   - patch
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchindextemplates
   verbs:
@@ -233,13 +233,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchindextemplates/finalizers
   verbs:
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchindextemplates/status
   verbs:
@@ -247,7 +247,7 @@ rules:
   - patch
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchroles
   verbs:
@@ -259,13 +259,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchroles/finalizers
   verbs:
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchroles/status
   verbs:
@@ -273,7 +273,7 @@ rules:
   - patch
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchtenants
   verbs:
@@ -285,13 +285,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchtenants/finalizers
   verbs:
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchtenants/status
   verbs:
@@ -299,7 +299,7 @@ rules:
   - patch
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchuserrolebindings
   verbs:
@@ -311,13 +311,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchuserrolebindings/finalizers
   verbs:
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchuserrolebindings/status
   verbs:
@@ -325,7 +325,7 @@ rules:
   - patch
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchusers
   verbs:
@@ -337,13 +337,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchusers/finalizers
   verbs:
   - update
 - apiGroups:
-  - opensearch.opster.io
+  - opensearch.eliatra.io
   resources:
   - opensearchusers/status
   verbs:

@@ -6,12 +6,8 @@ This guide is intended for users of the Opensearch Operator. If you want to cont
 
 The Operator can be easily installed using Helm:
 
-1. Add the helm repo: `helm repo add opensearch-operator https://opster.github.io/opensearch-k8s-operator/`
-2. Install the Operator: `helm install opensearch-operator opensearch-operator/opensearch-operator`
-
-Follow the instructions in this video to install the Operator:
-
-[![Watch the video](https://opster.com/wp-content/uploads/2022/05/Operator-Installation-Tutorial.png)](https://player.vimeo.com/video/708641527)
+1. Add the helm repo: `helm repo add opensearch-operator https://eliatra.github.io/opensearch-k8s-operator/`
+2. Install the Operator: `helm install eoko opensearch-operator/opensearch-operator`
 
 A few notes on operator releases:
 
@@ -32,7 +28,7 @@ OpenSearch cluster can be easily deployed using Helm. Follow the instructions in
 Create a file `cluster.yaml` with the following content:
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpenSearchCluster
 metadata:
   name: my-first-cluster
@@ -74,7 +70,7 @@ Then run `kubectl apply -f cluster.yaml`. If you watch the cluster (e.g. `watch 
 Run `kubectl port-forward svc/my-first-cluster-dashboards 5601`, then open [http://localhost:5601](http://localhost:5601) in your browser and log in with the default demo credentials `admin / admin`.
 Alternatively, if you want to access the OpenSearch REST API, run: `kubectl port-forward svc/my-first-cluster 9200`. Then open a second terminal and run: `curl -k -u admin:admin https://localhost:9200/_cat/nodes?v`. You should see the three deployed pods listed.
 
-If you'd like to delete your cluster, run: `kubectl delete -f cluster.yaml`. The Operator will then clean up and delete any Kubernetes resources created for the cluster. Note that this will not delete the persistent volumes for the cluster, in most cases. For a complete cleanup, run: `kubectl delete pvc -l opster.io/opensearch-cluster=my-first-cluster` to also delete the PVCs.
+If you'd like to delete your cluster, run: `kubectl delete -f cluster.yaml`. The Operator will then clean up and delete any Kubernetes resources created for the cluster. Note that this will not delete the persistent volumes for the cluster, in most cases. For a complete cleanup, run: `kubectl delete pvc -l eliatra.io/opensearch-cluster=my-first-cluster` to also delete the PVCs.
 
 The minimal cluster you deployed in this section is only intended for demo purposes. Please see the next sections on how to configure and manage the different aspects of your cluster.
 
@@ -366,7 +362,7 @@ This will configure an init container for each opensearch pod that executes the 
 
 This feature is Currently in BETA, you can configure the snapshot repo settings for the OpenSearch cluster through the operator. Using `snapshotRepositories` settings you can configure multiple snapshot repos. Once the snapshot repo is configured a user can create custom `_ism` policies through dashboard to backup the in indexes.
 
-Note: BETA flagged Features in a release are experimental. Therefore, we do not recommend the use of configuring snapshot repo in a production environment. For updates on the progress of snapshot/restore, or if you want leave feedback/contribute that could help improve the feature, please refer to the issue on [GitHub](https://github.com/Opster/opensearch-k8s-operator/issues/278).
+Note: BETA flagged Features in a release are experimental. Therefore, we do not recommend the use of configuring snapshot repo in a production environment. For updates on the progress of snapshot/restore, or if you want leave feedback/contribute that could help improve the feature, please refer to the issue on [GitHub](https://github.com/Eliatra/opensearch-k8s-operator/issues/278).
 
 ```yaml
 spec:
@@ -453,7 +449,7 @@ spec:
 You can customize the OpenSearch Dashboards configuration ([`opensearch_dashboards.yml`](https://github.com/opensearch-project/OpenSearch-Dashboards/blob/main/config/opensearch_dashboards.yml)) using the `additionalConfig` field in the dashboards section of the `OpenSearchCluster` custom resource:
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpenSearchCluster
 #...
 spec:
@@ -497,7 +493,7 @@ Note that changing the value in the secret has no direct influence on the dashbo
 When using OpenSearch behind a reverse proxy on a subpath (e.g. `/logs`) you have to configure a base path. This can be achieved by setting the base path field in the configuraiton of OpenSearch Dashboards. Behind the scenes the correct configuration options are automatically added to the dashboards configuration.
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpenSearchCluster
 ...
 spec:
@@ -767,7 +763,7 @@ manager:
 
 ### Custom init helper
 
-During cluster initialization the operator uses init containers as helpers. For these containers a busybox image is used ( specifically `public.ecr.aws/opsterio/busybox:1.27.2-buildx`). In case you are working in an offline environment and the cluster cannot access the registry or you want to customize the image, you can override the image used by specifying the `initHelper` image in your cluster spec:
+During cluster initialization the operator uses init containers as helpers. For these containers a busybox image is used ( specifically `docker.io/eliatra/eoko-busybox:1.27.2-buildx`). In case you are working in an offline environment and the cluster cannot access the registry or you want to customize the image, you can override the image used by specifying the `initHelper` image in your cluster spec:
 
 ```yaml
   spec:     
@@ -819,7 +815,7 @@ The PDB definition is unique for every nodePool.
 You must provide either `minAvailable` or `maxUnavailable` to configure PDB, but not both.
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpenSearchCluster
 ...
 spec:
@@ -882,7 +878,7 @@ Supported Service Types
 When using type LoadBalancer you can optionally set the load balancer source ranges.
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpenSearchCluster
 ...
 spec:
@@ -961,7 +957,7 @@ Note that currently a combination of both approaches is not possible. Once you u
 
 ### Securityconfig
 
-You can provide your own securityconfig (see the entire [demo securityconfig](https://github.com/Opster/opensearch-k8s-operator/blob/main/opensearch-operator/examples/securityconfig-secret.yaml) as an example and the [Access control documentation](https://opensearch.org/docs/latest/security-plugin/access-control/index/) of the OpenSearch project) with your own users and roles. To do that, you must provide a secret with all the required securityconfig yaml files.
+You can provide your own securityconfig (see the entire [demo securityconfig](https://github.com/Eliatra/opensearch-k8s-operator/blob/main/opensearch-operator/examples/securityconfig-secret.yaml) as an example and the [Access control documentation](https://opensearch.org/docs/latest/security-plugin/access-control/index/) of the OpenSearch project) with your own users and roles. To do that, you must provide a secret with all the required securityconfig yaml files.
 
 The Operator can be controlled using the following fields in the `OpenSearchCluster` custom resource:
 
@@ -1009,7 +1005,7 @@ The operator provides custom kubernetes resources that allow you to create/updat
 It is possible to manage Opensearch users in Kubernetes with the operator. The operator will not modify users that already exist. You can create an example user as follows:
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpensearchUser
 metadata:
   name: sample-user
@@ -1033,7 +1029,7 @@ Note that a secret called `sample-user-password` will need to exist in the `defa
 It is possible to manage Opensearch roles in Kubernetes with the operator. The operator will not modify roles that already exist. You can create an example role as follows:
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpensearchRole
 metadata:
   name: sample-role
@@ -1057,7 +1053,7 @@ spec:
 The operator allows you link any number of users, backend roles and roles with a OpensearchUserRoleBinding. Each user in the binding will be granted each role. E.g:
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpensearchUserRoleBinding
 metadata:
   name: sample-urb
@@ -1078,7 +1074,7 @@ spec:
 It is possible to manage Opensearch action groups in Kubernetes with the operator. The operator will not modify action groups that already exist. You can create an example action group as follows:
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpensearchActionGroup
 metadata:
   name: sample-action-group
@@ -1098,7 +1094,7 @@ spec:
 It is possible to manage Opensearch tenants in Kubernetes with the operator. The operator will not modify tenants that already exist. You can create an example tenant as follows:
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpensearchTenant
 metadata:
   name: sample-tenant
@@ -1187,7 +1183,7 @@ b. Use Our OpenSearchUser CRD and provide the secret under monitoringUserSecret.
 To configure monitoring you can add the following fields to your cluster spec:
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpenSearchCluster
 metadata:
   name: my-first-cluster
@@ -1212,7 +1208,7 @@ The operator provides a custom Kubernetes resource that allow you to create/upda
 It is possible to manage OpenSearch ISM policies in Kubernetes with the operator. Fields in the CRD directly maps to the OpenSearch ISM Policy structure. The operator will not modify policies that already exist. You can create an example policy as follows:
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpensearchISMPolicy
 metadata:
    name: sample-policy
@@ -1257,7 +1253,7 @@ The fields that have been changed, is `index_patterns` to `indexPatterns` (Opens
 The following example creates a component template for setting the number of shards and replicas, together with specifying a specific time format for documents:
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpensearchComponentTemplate
 metadata:
   name: sample-component-template
@@ -1287,7 +1283,7 @@ spec:
 The following index template makes use of the above component template (see `composedOf`) for all indices which follows the `logs-2020-01-*` index pattern:
 
 ```yaml
-apiVersion: opensearch.opster.io/v1
+apiVersion: opensearch.eliatra.io/v1
 kind: OpensearchIndexTemplate
 metadata:
   name: sample-index-template

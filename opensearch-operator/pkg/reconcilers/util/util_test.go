@@ -3,8 +3,8 @@ package util
 import (
 	"context"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/mocks/github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/mocks/github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers/k8s"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	v1 "k8s.io/api/core/v1"
@@ -12,13 +12,13 @@ import (
 
 var _ = Describe("Additional volumes", func() {
 	namespace := "Additional volume test"
-	var volumeConfigs []opsterv1.AdditionalVolume
+	var volumeConfigs []eliatrav1.AdditionalVolume
 	var mockClient *k8s.MockK8sClient
 
 	BeforeEach(func() {
 		mockClient = k8s.NewMockK8sClient(GinkgoT())
 		mockClient.EXPECT().Context().Return(context.Background())
-		volumeConfigs = []opsterv1.AdditionalVolume{
+		volumeConfigs = []eliatrav1.AdditionalVolume{
 			{
 				Name: "myVolume",
 				Path: "myPath/a/b",

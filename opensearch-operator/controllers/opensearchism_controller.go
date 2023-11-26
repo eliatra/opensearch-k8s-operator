@@ -3,8 +3,8 @@ package controllers
 import (
 	"context"
 
-	opsterv1 "github.com/Opster/opensearch-k8s-operator/opensearch-operator/api/v1"
-	"github.com/Opster/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers"
+	eliatrav1 "github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/api/v1"
+	"github.com/Eliatra/opensearch-k8s-operator/opensearch-operator/pkg/reconcilers"
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/tools/record"
@@ -19,20 +19,20 @@ type OpensearchISMPolicyReconciler struct {
 	client.Client
 	Scheme   *runtime.Scheme
 	Recorder record.EventRecorder
-	Instance *opsterv1.OpenSearchISMPolicy
+	Instance *eliatrav1.OpenSearchISMPolicy
 	logr.Logger
 }
 
-//+kubebuilder:rbac:groups=opensearch.opster.io,resources=ismpolicies,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=opensearch.opster.io,resources=ismpolicies/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=opensearch.opster.io,resources=ismpolicies/finalizers,verbs=update
+//+kubebuilder:rbac:groups=opensearch.eliatra.io,resources=ismpolicies,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=opensearch.eliatra.io,resources=ismpolicies/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=opensearch.eliatra.io,resources=ismpolicies/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
 func (r *OpensearchISMPolicyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	r.Logger = log.FromContext(ctx).WithValues("tenant", req.NamespacedName)
 	r.Logger.Info("Reconciling OpensearchISMPolicy")
-	r.Instance = &opsterv1.OpenSearchISMPolicy{}
+	r.Instance = &eliatrav1.OpenSearchISMPolicy{}
 	err := r.Get(ctx, req.NamespacedName, r.Instance)
 	if err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
@@ -67,7 +67,7 @@ func (r *OpensearchISMPolicyReconciler) Reconcile(ctx context.Context, req ctrl.
 // SetupWithManager sets up the controller with the Manager.
 func (r *OpensearchISMPolicyReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&opsterv1.OpenSearchISMPolicy{}).
-		Owns(&opsterv1.OpenSearchCluster{}). // Get notified when opensearch clusters change
+		For(&eliatrav1.OpenSearchISMPolicy{}).
+		Owns(&eliatrav1.OpenSearchCluster{}). // Get notified when opensearch clusters change
 		Complete(r)
 }
