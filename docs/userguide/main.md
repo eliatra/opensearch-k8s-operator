@@ -5,7 +5,7 @@ This guide is intended for users of the Opensearch Operator. If you want to cont
 ## Installation
 
 The Operator can be easily installed using Helm:
-1. Install the Operator: ` eoko oci://registry-1.docker.io/eliatra/eoko`
+1. Install the Operator: `helm install eoko oci://registry-1.docker.io/eliatra/eoko`
 
 A few notes on operator releases:
 

@@ -41,7 +41,7 @@ manager:
   parallelRecoveryEnabled: true
 
   image:
-    repository: docker.io/eliatra/eoko
+    repository: docker.io/eliatra/eoko-bin
     ## tag default uses appVersion from Chart.yaml, to override specify tag tag: "v1.1"
     tag: ""
     pullPolicy: "Always"
